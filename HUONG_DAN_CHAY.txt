@@ -1,0 +1,108 @@
+================================================================================
+                    HƯỚNG DẪN CHẠY A*CARE CLINIC
+================================================================================
+
+>> BẠN ĐÃ CÓ FILE ZIP SOURCE/ → GIẢI NÉN VÀ LÀM THEO 4 BƯỚC
+
+================================================================================
+BƯỚC 1: CÀI PHẦN MỀM
+================================================================================
+
+Tải và cài đặt theo thứ tự:
+
+1. Java JDK 21
+   Link: https://download.oracle.com/java/21/latest/jdk-21_windows-x64_bin.exe
+   - Chạy file → Next → Install
+
+2. Node.js (v18 trở lên)
+   Link: https://nodejs.org/en/download/
+   - Chạy file → Next → Install (tick tất cả)
+
+3. MySQL Installer
+   Link: https://dev.mysql.com/downloads/installer/
+   - Chọn "MySQL Installer Community" → Tải
+   - Chạy file → Chọn "Developer Default"
+   - Đặt Root Password (ví dụ: 123456) → NHỚ PASSWORD NÀY!
+   - Next → Finish
+
+4. MySQL Workbench (đã có trong MySQL Installer ở bước 3)
+
+================================================================================
+BƯỚC 2: IMPORT DATABASE
+================================================================================
+
+1. Mở MySQL Workbench
+
+2. Kết nối MySQL:
+   - Click vào "Local instance MySQL"
+   - Nhập root password (ví dụ: 123456)
+
+3. Import database:
+   - Click biểu tượng "Create a new SQL tab" (hoặc Ctrl+T)
+   - Mở file "file_query.sql" trong dự án 
+   - Copy toàn bộ nội dung
+   - Paste vào MySQL Workbench
+   - Click nút "Execute" (biểu tượng tia chớp) hoặc nhấn Ctrl+Shift+Enter
+   - Đợi chạy xong (1-2 phút)
+
+4. Kiểm tra:
+   - Bên trái, click "Refresh" (hoặc F5)
+   - Sẽ thấy database "acare_clinic" với 5 bảng: users, rooms, services, appointments, activity_log
+
+================================================================================
+BƯỚC 3: CHẠY BACKEND
+================================================================================
+
+1. Sửa password MySQL:
+   - Mở file: Backend/src/main/resources/application.properties
+   - Tìm dòng: spring.datasource.password=123456
+   - Đổi 123456 thành root password MySQL của bạn
+   - Lưu file (Ctrl+S)
+
+2. Mở Terminal trong thư mục Backend:
+   Cách 1: Shift + Chuột phải trong thư mục Backend → "Open PowerShell window here"
+   Cách 2: Mở CMD/PowerShell → gõ: cd đường\dẫn\đến\Backend
+
+3. Chạy lệnh:
+   .\mvnw.cmd spring-boot:run
+
+4. Đợi thấy: "Started BackendApplication in X.XXX seconds"
+
+GIỮ CỬA SỔ NÀY MỞ! KHÔNG TẮT!
+
+================================================================================
+BƯỚC 4: CHẠY FRONTEND
+================================================================================
+
+1. Mở Terminal MỚI trong thư mục Frontend
+   (Không tắt Terminal Backend!)
+
+2. Cài packages:
+   npm install
+   (Đợi 1-2 phút)
+
+3. Tạo file .env:
+   - Trong thư mục Frontend, tạo file mới tên ".env"
+   - Mở file, gõ:
+     VITE_GEMINI_API_KEY=AIzaSyDummy
+   - Lưu
+
+   * Lấy API key thật tại https://aistudio.google.com/apikey nếu muốn dùng chatbot
+
+4. Chạy lệnh:
+   npm run dev
+
+5. Đợi thấy: "Local: http://localhost:5173/"
+
+6. Mở trình duyệt → vào: http://localhost:5173
+
+================================================================================
+HOÀN THÀNH!
+================================================================================
+
+Bây giờ có 2 cửa sổ Terminal đang chạy:
+- Backend (port 8080)
+- Frontend (port 5173)
+
+Để tắt: Nhấn Ctrl+C trong mỗi cửa sổ
+
