@@ -77,10 +77,8 @@ source/
 │           └── 📂 java/com/acare/backend/
 │               └── 📄 BackendApplicationTests.java
 │
-└── 📂 Frontend/   # React + Vite
+└── 📂 Frontend/ 
     ├── 📄 .gitignore
-    ├── 📄 .env
-    ├── 📄 .env.example
     ├── 📄 package.json
     ├── 📄 package-lock.json
     ├── 📄 vite.config.js

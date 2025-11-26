@@ -81,20 +81,57 @@ BƯỚC 4: CHẠY FRONTEND
    npm install
    (Đợi 1-2 phút)
 
-3. Tạo file .env:
-   - Trong thư mục Frontend, tạo file mới tên ".env"
-   - Mở file, gõ:
-     VITE_GEMINI_API_KEY=AIzaSyDummy
-   - Lưu
-
-   * Lấy API key thật tại https://aistudio.google.com/apikey nếu muốn dùng chatbot
-
-4. Chạy lệnh:
+3. Chạy lệnh:
    npm run dev
 
-5. Đợi thấy: "Local: http://localhost:5173/"
+4. Đợi thấy: "Local: http://localhost:5173/"
 
-6. Mở trình duyệt → vào: http://localhost:5173
+5. Mở trình duyệt → vào: http://localhost:5173
+
+Bước 5: Chạy chatbot (nếu cần)
+## Hướng dẫn chạy Chatbot RAG
+
+Hệ thống chatbot sử dụng RAG (Retrieval-Augmented Generation) được xây dựng bằng Python và chạy độc lập với Backend Java. Để khởi động server chatbot, thực hiện các bước sau:
+* Lấy API key thật tại https://aistudio.google.com/apikey
+* Vào file config.py trong source\Backend\src\main\python\RAG
+* Thay API key vừa lấy được và dán vào "your_api_key"
+
+### Bước 5.1: Di chuyển đến thư mục RAG
+Mở terminal và di chuyển đến thư mục chứa module RAG:
+Ví dụ:
+```powershell
+cd source\Backend\src\main\python\RAG
+```
+
+### Bước 5.2: Cài đặt các thư viện cần thiết
+
+Đảm bảo đã cài đặt tất cả các dependencies từ file requirements.txt:
+
+```powershell
+pip install -r requirements.txt
+```
+
+### Bước 5.3: Khởi động server RAG
+
+Chạy lệnh sau để khởi động server chatbot với Uvicorn:
+
+```powershell/cmd
+uvicorn app:app --reload --port 8005
+```
+
+### Bước 5.4: Kiểm tra server
+
+Sau khi chạy thành công, bạn sẽ thấy thông báo tương tự:
+
+```
+INFO:     Uvicorn running on http://127.0.0.1:8005 (Press CTRL+C to quit)
+INFO:     Started reloader process
+INFO:     Started server process
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+```
+
+Server RAG giờ đã sẵn sàng nhận request từ Frontend hoặc Backend tại địa chỉ `http://localhost:8005`.
 
 ================================================================================
 HOÀN THÀNH!
