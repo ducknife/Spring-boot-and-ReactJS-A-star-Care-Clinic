@@ -1,7 +1,7 @@
 import google.generativeai as genai
 import os
 
-os.environ["GOOGLE_API_KEY"] = "your_api_key";
+os.environ["GOOGLE_API_KEY"] = "AIzaSyBSpCU4O8vvngU3MSJkvBaBqIf7ZA3j91o";
 genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
 
 GEMINI_MODEL = "models/gemini-2.5-flash" 

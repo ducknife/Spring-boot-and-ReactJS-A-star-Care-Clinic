@@ -2,7 +2,6 @@
 Backend/target/
 
 # Frontend - Node
-Frontend/node_modules/
 Frontend/dist/
 Frontend/.env
 Frontend/.env.local
