@@ -231,7 +231,7 @@ function EditProfile() {
 
                             <motion.button
                                 type="button"
-                                onClick={() => navigate("/doctor/profile")}
+                                onClick={() => navigate(`/${role == "PATIENT" ? 'patient' : 'doctor'}/profile`)}
                                 whileHover={{ y: -2 }}
                                 whileTap={{ scale: 0.98 }}
                                 transition={{ type: "spring", stiffness: 180, damping: 20 }}
