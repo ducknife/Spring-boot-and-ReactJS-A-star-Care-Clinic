@@ -1,11 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import AppointmentCard from "../patient/AppointmentCard";
 import { getUserId } from "../../utils/authUtils";
-import { getPendingAppointmentByDoctorId } from "../../api/appointment/pending/getPendingAppointmentByDoctorId";
 import { motion } from "framer-motion";
 import { MdOutlineCancel } from "react-icons/md";
-import { getUserById } from "../../api/user/getUser";
-import { getRoomsById } from "../../api/room/getRoomById";
+import { appointmentService } from "../../api/services";
 
 const container = {
     hidden: { opacity: 0, y: 20 },
@@ -24,9 +22,14 @@ function Schedule() {
     const id = getUserId();
 
     useEffect(() => {
+        if (!id) {
+            setLoading(false);
+            return;
+        }
+
         const fetchData = async () => {
             try {
-                const response = await getPendingAppointmentByDoctorId(id);
+                const response = await appointmentService.pendingByDoctorId(id);
                 setData(response);
             }
             catch (error) {
@@ -35,7 +38,7 @@ function Schedule() {
         };
         fetchData();
 
-    }, []);
+    }, [id]);
 
     return (
         <motion.div

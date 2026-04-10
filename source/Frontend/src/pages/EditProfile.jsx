@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getUserById } from "../api/user/getUser";
-import { updateUser } from "../api/user/updateUser";
-import { getUserId, getUserRole } from "../utils/authUtils";
+import { useNavigate } from "react-router-dom";import { getUserId, getUserRole } from "../utils/authUtils";
 import { motion } from "framer-motion";
+import { userService } from "../api/services";
 
 const container = {
     hidden: { opacity: 0, y: 20 },
@@ -52,7 +50,7 @@ function EditProfile() {
     useEffect(() => {
         (async () => {
             try {
-                const data = await getUserById(id);
+                const data = await userService.getById(id);
 
                 setForm({
                     fullName: data?.fullName || "",
@@ -98,7 +96,7 @@ function EditProfile() {
             };
 
             if (confirm("Xác nhận lưu thay đổi")) {
-                await updateUser(id, data);
+                await userService.update(id, data);
                 navigate(`/${role == "PATIENT" ? 'patient' : 'doctor'}/profile`);
             }
 

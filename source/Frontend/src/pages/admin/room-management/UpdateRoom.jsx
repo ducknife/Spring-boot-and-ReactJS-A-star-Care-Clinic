@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { getRoomsById } from "../../../api/room/getRoomById";
-import { updateRoom } from "../../../api/room/updateRoom";
+import { roomService } from "../../../api/services";
 
 const container = {
     hidden: { opacity: 0, y: 20 },
@@ -41,7 +40,7 @@ function EditRoom() {
     useEffect(() => {
         const getRoomInfo = async () => {
             try {
-                const data = await getRoomsById(id);
+                const data = await roomService.getById(id);
                 setForm({
                     name: data.name,
                     location: data.location,
@@ -67,7 +66,7 @@ function EditRoom() {
             };
 
             if (confirm("Xác nhận thêm phòng")) {
-                const response = await updateRoom(id, data);
+                const response = await roomService.update(id, data);
                 navigate("/admin/rooms");
             }
 

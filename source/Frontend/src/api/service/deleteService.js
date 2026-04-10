@@ -1,10 +1,8 @@
+import { apiClient } from "../axiosClient";
+
 export async function deleteServiceById(id) {
     try {
-        const getResponse = await fetch(`http://localhost:8080/api/services/${id}`, {
-            method: "DELETE",
-        });
-        if (!getResponse.ok) throw new Error("Can't load data");
-        const data = await getResponse.json()
+        const { data } = await apiClient.delete(`/services/${id}`);
         return data;
     }
     catch (error) {

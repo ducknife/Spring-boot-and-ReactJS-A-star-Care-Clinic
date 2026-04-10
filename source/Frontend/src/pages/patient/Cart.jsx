@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { getPendingAppointmentByPatientId } from "../../api/appointment/pending/getPendingAppointmentByPatientId";
 import { getUserId } from "../../utils/authUtils";
 import AppointmentCard from "./AppointmentCard";
 import { motion } from "framer-motion";
+import { appointmentService } from "../../api/services";
 
 const item = {
     hidden: { opacity: 0, y: 8 },
@@ -25,9 +25,14 @@ function Cart() {
     const [data, setData] = useState([]);
 
     useEffect(() => {
+        if (!id) {
+            setLoading(false);
+            return;
+        }
+
         const getPendingAppointments = async () => {
             try {
-                const pendingAppointments = await getPendingAppointmentByPatientId(id);
+                const pendingAppointments = await appointmentService.pendingByPatientId(id);
                 setData(pendingAppointments);
 
             }
@@ -40,7 +45,7 @@ function Cart() {
         };
         getPendingAppointments();
 
-    }, []);
+    }, [id]);
 
     if (loading) return <p className="text-center text-gray-500 py-10">Đang tải...</p>;
 

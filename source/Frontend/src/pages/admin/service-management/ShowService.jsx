@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-// Đổi path này cho đúng với API của anh
-import { getServiceById } from "../../../api/service/getServiceById";
-import { getUserRole } from "../../../utils/authUtils";
+import { serviceService } from "../../../api/services";
+// Đổi path này cho đúng với API của anhimport { getUserRole } from "../../../utils/authUtils";
 
 const container = {
     hidden: { opacity: 0, y: 20 },
@@ -41,7 +40,7 @@ function AdminShowService() {
     useEffect(() => {
         const fetchService = async () => {
             try {
-                const data = await getServiceById(id);
+                const data = await serviceService.getById(id);
                 setService(data);
             } catch (err) {
                 setError(err.message || "Không thể tải thông tin dịch vụ");

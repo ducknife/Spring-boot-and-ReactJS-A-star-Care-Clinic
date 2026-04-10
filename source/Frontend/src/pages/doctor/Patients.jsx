@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { MdOutlineCancel } from "react-icons/md";
-import { getAppointmentsByDoctorId } from "../../api/appointment/getAppointmentsByDoctorId";
 import { getUserId } from "../../utils/authUtils";
-import { getUserById } from "../../api/user/getUser";
+import { appointmentService, userService } from "../../api/services";
 
 const container = {
     hidden: { opacity: 0, y: 16 },
@@ -86,36 +85,28 @@ function Patients() {
     const doctorId = getUserId();
 
     useEffect(() => {
+        if (!doctorId) {
+            setLoading(false);
+            return;
+        }
+
         const getPatients = async () => {
             try {
-                const appoinments = await getAppointmentsByDoctorId(doctorId);
+                const appoinments = await appointmentService.getByDoctorId(doctorId);
                 const patientSet = new Set(appoinments.map(a => a.patientId));
-                const list = []
-                for (const patientId of patientSet) {
-                    const patient = {
-                        id: patientId,
-                        fullName: "",
-                        idNumber: "",
-                        birthDate: "",
-                        phone: "",
-                        address: ""
-                    }
-                    const getPatient = async () => {
-                        try {
-                            const response = await getUserById(patientId);
-                            patient.fullName = response.fullName;
-                            patient.address = response.address;
-                            patient.birthDate = response.birthDate;
-                            patient.phone = response.phone;
-                            patient.idNumber = response.idNumber;
-                        }
-                        catch (error) {
-                            console.error(error.message);
-                        }
-                    }
-                    await getPatient();
-                    list.push(patient);
-                }
+                const list = await Promise.all(
+                    Array.from(patientSet).map(async (patientId) => {
+                        const response = await userService.getById(patientId);
+                        return {
+                            id: patientId,
+                            fullName: response?.fullName || "",
+                            idNumber: response?.idNumber || "",
+                            birthDate: response?.birthDate || "",
+                            phone: response?.phone || "",
+                            address: response?.address || "",
+                        };
+                    })
+                );
                 setPatients(list);
 
             }

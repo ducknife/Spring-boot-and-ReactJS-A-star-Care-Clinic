@@ -1,10 +1,9 @@
+import { apiClient } from "../axiosClient";
+
 export async function getAppointments() {
     try {
-        const getResponse = await fetch(`http://localhost:8080/api/appointments`, {
-            method: "GET",
-        });
-        if (!getResponse.ok) throw new Error("ERROR");
-        return await getResponse.json();
+        const { data } = await apiClient.get(`/appointments`);
+        return data;
     }
     catch (error) {
         console.error(error.message);

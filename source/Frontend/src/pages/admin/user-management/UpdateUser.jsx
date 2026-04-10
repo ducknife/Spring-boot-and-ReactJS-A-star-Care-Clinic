@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { updateUser } from "../../../api/user/updateUser";
 import { motion } from "framer-motion";
-import { getUserById } from "../../../api/user/getUser";
+import { userService } from "../../../api/services";
 
 const container = {
     hidden: { opacity: 0, y: 20 },
@@ -51,7 +50,7 @@ function AdminEditProfile() {
     useEffect(() => {
         (async () => {
             try {
-                const data = await getUserById(id);
+                const data = await userService.getById(id);
 
                 setForm({
                     fullName: data?.fullName || "",
@@ -99,7 +98,7 @@ function AdminEditProfile() {
             };
 
             if (confirm("Xác nhận lưu thay đổi")) {
-                await updateUser(id, data);
+                await userService.update(id, data);
                 navigate("/admin/users");
             }
 

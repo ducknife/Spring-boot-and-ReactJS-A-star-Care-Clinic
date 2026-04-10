@@ -1,7 +1,5 @@
 import { RiTwitterXLine, RiArrowRightLine, RiArrowUpSLine } from "react-icons/ri";
-import { FaFacebookF, FaInstagram, FaPinterestP, FaCcVisa, FaCcPaypal, FaCcMastercard } from "react-icons/fa";
-import { FiActivity } from "react-icons/fi";
-import { SiBitcoin, SiRazorpay } from "react-icons/si";
+import { FaFacebookF, FaInstagram, FaPinterestP } from "react-icons/fa";
 import { services, information } from "../data/footerList";
 import logo_plus from "../assets/images/logo/clinic.png";
 import Chatbot from "./Chatbot";
@@ -27,10 +25,8 @@ function GoTopButton() {
 function Footer() {
     return (
         <footer className="relative text-slate-200">
-            {/* vùng chính */}
-            <div className="bg-[#011038]">
-                <div className="mx-auto max-w-6xl px-4 py-16 grid gap-10 md:grid-cols-4">
-                    {/* cột 1: logo + địa chỉ */}
+            <div className="bg-gradient-to-br from-[#031638] via-[#051f4e] to-[#072f63]">
+                <div className="mx-auto grid max-w-7xl gap-10 px-6 py-16 md:grid-cols-4">
                     <div>
                         <div className="flex items-center gap-3">
                             <div className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center">
@@ -42,7 +38,7 @@ function Footer() {
                             </div>
                         </div>
                         <p className="mt-6 leading-relaxed text-slate-300/90">
-                            2C Route
+                            Nhanh chóng, chính xác và tận tâm trong từng trải nghiệm khám chữa bệnh.
                         </p>
 
                         <a href="tel:0379330721" className="mt-6 block text-blue-900 text-lg font-semibold hover:underline">
@@ -51,7 +47,6 @@ function Footer() {
                         <a href="mailto:info@gmail.com" className="mt-1 block hover:underline">
                             darkisknight126@gmail.com
                         </a>
-                        {/* social */}
                         <div className="mt-6 flex items-center gap-4 text-xl">
                             <a href="#" className="hover:text-blue-900 transition-colors" aria-label="Facebook">
                                 <FaFacebookF />
@@ -67,7 +62,6 @@ function Footer() {
                             </a>
                         </div>
                     </div>
-                    {/* cột 2: services */}
                     <div>
                         <h4 className="text-white text-lg font-bold tracking-wide">DỊCH VỤ</h4>
                         <div className="h-1 w-12 bg-sky-500 rounded mt-3" />
@@ -79,7 +73,6 @@ function Footer() {
                             ))}
                         </ul>
                     </div>
-                    {/* cột 3: information */}
                     <div>
                         <h4 className="text-white text-lg font-bold tracking-wide">THÔNG TIN</h4>
                         <div className="h-1 w-12 bg-sky-500 rounded mt-3" />
@@ -91,7 +84,6 @@ function Footer() {
                             ))}
                         </ul>
                     </div>
-                    {/* cột 4: newsletter */}
                     <div>
                         <h4 className="text-white text-lg font-bold tracking-wide">ĐĂNG KÝ NHẬN TIN</h4>
                         <div className="h-1 w-12 bg-sky-500 rounded mt-3" />
@@ -101,7 +93,6 @@ function Footer() {
                         <form
                             onSubmit={(e) => {
                                 e.preventDefault();
-                                // TODO: handle subscribe
                             }}
                             className="mt-5"
                         >
@@ -110,10 +101,9 @@ function Footer() {
                                     type="email"
                                     placeholder="Địa chỉ Email"
                                     className="
-                                        w-full rounded-full bg-white placeholder-slate-400
+                                        w-full rounded-full bg-white text-slate-800 placeholder-slate-400
                                         px-5 py-3 outline-none
                                         border border-white/20 focus:border-sky-500
-                                        text-slate-100
                                     "
                                     required
                                 />
@@ -137,15 +127,12 @@ function Footer() {
                     </div>
                 </div>
             </div>
-            {/* thanh dưới cùng */}
             <div className="bg-[#011342]">
-                <div className="mx-auto max-w-6xl px-4 py-4 flex flex-col md:flex-row items-center justify-center gap-4">
+                <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-4 px-4 py-4 md:flex-row">
                     <p className="text-slate-300/90">© Copyright 2025 A<sup>*</sup> SQUAD, All rights reserved ®</p>
                 </div>
             </div>
-            {/* nút back to top */}
             <GoTopButton />
-            {/* Chatbot */}
             <Chatbot />
         </footer>
     );

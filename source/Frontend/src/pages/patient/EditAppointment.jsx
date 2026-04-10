@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
-import { getDoctors } from "../../api/user/getDoctors";
-import { getRooms } from "../../api/room/getRoom";
-import { getServices } from "../../api/service/getServices";
-import { getUserId } from "../../utils/authUtils";
-import { updateAppointment } from "../../api/appointment/update/updateAppointment";
 import { useParams } from "react-router-dom";
-import { getAppointmentById } from "../../api/appointment/getAppointmentById";
 import { motion } from "framer-motion";
+import { getUserId } from "../../utils/authUtils";
+import { appointmentService, roomService, serviceService, userService } from "../../api/services";
 
 const container = {
     hidden: { opacity: 0, y: 20 },
@@ -40,23 +36,36 @@ function EditAppointment() {
     const { id } = useParams();
 
     useEffect(() => {
-        const fetchAppointmentById = async () => {
+        if (!id) return;
+
+        const fetchInitialData = async () => {
             try {
-                const data = await getAppointmentById(id);
+                const [appointmentData, doctorData, roomData, serviceData] = await Promise.all([
+                    appointmentService.getById(id),
+                    userService.getDoctors(),
+                    roomService.getAll(),
+                    serviceService.getAll(),
+                ]);
+
                 setForm({
-                    patientId: data.patientId,
-                    doctorId: data.doctorId,
-                    roomId: data.roomId,
-                    startTime: data.startTime,
-                    note: data.note
+                    patientId: appointmentData.patientId,
+                    doctorId: appointmentData.doctorId,
+                    roomId: appointmentData.roomId,
+                    startTime: appointmentData.startTime,
+                    note: appointmentData.note,
                 });
+
+                setDoctors(doctorData || []);
+                setRooms(roomData || []);
+                setServices(serviceData || []);
             }
             catch (error) {
-                console.error(error.messgage);
+                console.error(error.message);
             }
-        }
-        fetchAppointmentById();
-    }, []);
+        };
+
+        fetchInitialData();
+    }, [id]);
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -66,7 +75,7 @@ function EditAppointment() {
         if (confirm("Xác nhận cập nhật lịch hẹn")) {
             e.preventDefault();
             try {
-                const data = await updateAppointment(id, form);
+                const data = await appointmentService.update(id, form);
                 if (data.status == 404) throw new Error(data.message);
                 setMessage("Cập nhật thành công lịch hẹn " + data.id);
             }
@@ -76,26 +85,7 @@ function EditAppointment() {
         }
     };
 
-    useEffect(() => {
-        const fetchDoctor = async () => {
-            const data = await getDoctors();
-            setDoctors(data);
-        }
-        fetchDoctor();
-
-        const fetchRoom = async () => {
-            const data = await getRooms();
-            setRooms(data);
-        }
-        fetchRoom();
-
-        const fetchService = async () => {
-            const data = await getServices();
-            setServices(data);
-        }
-        fetchService();
-
-    }, []);
+    
 
     return (
         <>

@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { getServices } from "../api/service/getServices";
-import { searchServices } from "../api/service/searchServices";
 import { motion } from "framer-motion";
 import { HiOutlineArrowRight } from "react-icons/hi";
 import { FiSearch } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import { serviceService } from "../api/services";
 
 const container = {
     hidden: { opacity: 0 },
@@ -44,7 +43,7 @@ function Services() {
     useEffect(() => {
         const loadAll = async () => {
             try {
-                const data = await getServices();
+                const data = await serviceService.getAll();
                 setServices(data);
             }
             catch (err) {
@@ -70,7 +69,7 @@ function Services() {
     const handleSearch = async () => {
         setLoading(true);
         try {
-            const searchResults = await searchServices(searchParams);
+            const searchResults = await serviceService.search(searchParams);
             setServices(searchResults);
         }
         catch (err) {
@@ -91,7 +90,7 @@ function Services() {
         });
         setLoading(true);
         try {
-            const data = await getServices();
+            const data = await serviceService.getAll();
             setServices(data);
         } catch (err) {
             console.error("Error fetching services:", err);
@@ -102,13 +101,13 @@ function Services() {
     };
 
     if (loading) return (
-        <div className="min-h-screen bg-gradient-to-tl from-sky-50 via-white to-sky-500 flex items-center justify-center">
+        <div className="min-h-screen bg-[var(--surface)] flex items-center justify-center">
             <div className="text-center p-4 text-slate-600">Đang tải dịch vụ...</div>
         </div>
     );
 
     if (error) return (
-        <div className="min-h-screen bg-gradient-to-tl from-sky-50 via-white to-sky-500 flex items-center justify-center">
+        <div className="min-h-screen bg-[var(--surface)] flex items-center justify-center">
             <div className="text-center text-red-500 p-4">{error}</div>
         </div>
     );
@@ -118,14 +117,14 @@ function Services() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="p-6 bg-gradient-to-tl from-sky-50 via-white to-sky-500 min-h-[40vh]"
+            className="min-h-[40vh] bg-[var(--surface)] px-6 py-10"
         >
             {/* Header */}
             <motion.h1 
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="ml-[12vw] mr-[12vw] bg-white text-4xl font-semibold text-center p-3 rounded-xl shadow-xl mb-6 text-[#00278D]"
+                className="mx-auto mb-8 max-w-6xl rounded-[28px] bg-gradient-to-br from-[#03163d] via-[#06245f] to-[#0e4a82] p-8 text-center text-4xl font-semibold text-white shadow-2xl"
             >
                 Danh mục dịch vụ
             </motion.h1>
@@ -135,7 +134,7 @@ function Services() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="mx-[12vw] mb-6 bg-white rounded-2xl shadow-xl p-6"
+                className="mx-auto mb-8 max-w-6xl rounded-2xl border border-cyan-100 bg-white p-6 shadow-xl"
             >
                 <div className="flex items-center gap-2 mb-4">
                     <FiSearch className="text-[#00278D]" size={20} />
@@ -195,14 +194,14 @@ function Services() {
                 <div className="flex gap-3">
                     <button
                         onClick={handleSearch}
-                        className="bg-[#00278D] text-white px-6 py-2 rounded-lg hover:bg-sky-700 transition-colors font-medium flex items-center gap-2"
+                        className="flex items-center gap-2 rounded-lg bg-[var(--brand-navy)] px-6 py-2 font-medium text-white transition-colors hover:bg-sky-700"
                     >
                         <FiSearch size={16} />
                         Tìm kiếm
                     </button>
                     <button
                         onClick={handleReset}
-                        className="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors font-medium"
+                        className="rounded-lg bg-slate-500 px-6 py-2 font-medium text-white transition-colors hover:bg-slate-600"
                     >
                         Đặt lại
                     </button>
@@ -215,15 +214,15 @@ function Services() {
                     initial="hidden"
                     animate="show"
                     variants={container}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pl-[12vw] pr-[12vw]"
+                    className="mx-auto grid max-w-6xl grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3"
                 >
                     {services.map((s) => (
                         <motion.div
                             key={s.id}
                             variants={item}
-                            className="group flex flex-col justify-between p-8 rounded-xl bg-white shadow-xl transition-all duration-300 hover:shadow-2xl"
+                            className="group flex flex-col justify-between rounded-2xl border border-cyan-100 bg-white p-8 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
                         >
-                            <div className="w-[4vw] h-[4vw] mb-8 flex items-center justify-center rounded-2xl bg-gradient-to-tl from-sky-400 via-sky-600 to-sky-500 text-white text-3xl">
+                            <div className="mb-8 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tl from-sky-400 via-sky-600 to-sky-500 text-3xl text-white">
                                 {s.icon || (s.name || "S").charAt(0)}
                             </div>
 
@@ -235,9 +234,9 @@ function Services() {
 
                             <div
                                 onClick={() => navigate(`/show-service/${s.id}`)}
-                                className="h-14 flex items-center justify-center rounded-xl bg-sky-100 text-sky-500 hover:bg-[#00278D] hover:text-white transition-all duration-300 cursor-pointer"
+                                className="flex h-12 cursor-pointer items-center justify-center rounded-xl bg-cyan-50 text-sky-700 transition-all duration-300 hover:bg-[var(--brand-navy)] hover:text-white"
                             >
-                                Read more <HiOutlineArrowRight className="w-5 h-5 ml-2" />
+                                Read more <HiOutlineArrowRight className="ml-2 h-5 w-5" />
                             </div>
                         </motion.div>
                     ))}

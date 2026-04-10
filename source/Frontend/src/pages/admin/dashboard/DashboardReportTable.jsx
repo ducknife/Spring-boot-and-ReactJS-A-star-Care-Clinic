@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
-import { getDoneAppointmentThisMonth } from "../../../api/appointment/done/getDoneAppointmentThisMonth";
-import { getServiceById } from "../../../api/service/getServiceById";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { FaChartSimple } from "react-icons/fa6";
 import { FaTableCells } from "react-icons/fa6";
+import { appointmentService, serviceService } from "../../../api/services";
 
 function DashboardReportTable() {
     const [data, setData] = useState([]);
@@ -21,7 +19,7 @@ function DashboardReportTable() {
 
         const fetchMonthData = async () => {
             try {
-                const appointments = await getDoneAppointmentThisMonth();
+                const appointments = await appointmentService.doneThisMonth();
                 
                 // Tạo map để nhóm theo ngày
                 const dailyStats = {};
@@ -49,7 +47,7 @@ function DashboardReportTable() {
                         try {
                             const serviceId = parseInt(apt.note);
                             if (!isNaN(serviceId)) {
-                                const service = await getServiceById(serviceId);
+                                const service = await serviceService.getById(serviceId);
                                 if (service && service.price) {
                                     dailyStats[dateKey].revenue += service.price;
                                 }

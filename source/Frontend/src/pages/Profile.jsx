@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { getUserById } from "../api/user/getUser";
 import { getUserId, getUserRole } from "../utils/authUtils";
 import { useNavigate } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import { motion } from "framer-motion";
 import doctorImg from "../assets/images/doctor/doctor.jpg";
 import patientImg from "../assets/images/doctor/patient.jpg";
+import { userService } from "../api/services";
 
 const container = {
     hidden: { opacity: 0, y: 20 },
@@ -30,9 +30,14 @@ function Profile() {
     const [error, setError] = useState("");
 
     useEffect(() => {
+        if (!id) {
+            setLoading(false);
+            return;
+        }
+
         const fetchUser = async () => {
             try {
-                const data = await getUserById(id);
+                const data = await userService.getById(id);
                 setProfile(data);
             }
             catch (err) {
@@ -43,7 +48,7 @@ function Profile() {
             }
         }
         fetchUser();
-    }, []);
+    }, [id]);
 
     if (loading) return <div className="loading-profile text-center p-4">Đang tải hồ sơ người dùng ... </div>
     if (error) return <div className="text-center text-red-500 p-4">{error}</div>;

@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { loginApi } from "../../api/auth";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useState } from "react";import { NavLink, useNavigate } from "react-router-dom";
+import { authService } from "../../api/services";
 
 export default function Login() {
     const [role, setRole] = useState("user");
@@ -18,7 +17,7 @@ export default function Login() {
                 email: form.email, 
                 password: form.password 
             }
-            const res = await loginApi(data);
+            const res = await authService.login(data);
             
             console.log("Login OK:", res);
             const serverRole = res.roles[0].toLowerCase();

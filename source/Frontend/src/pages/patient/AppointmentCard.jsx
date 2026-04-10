@@ -1,13 +1,8 @@
 import { useEffect, useState } from "react";
-import { getUserById } from "../../api/user/getUser";
-import { deleteAppointment } from "../../api/appointment/delete/deleteAppointmentInCart";
-import { updateAppointmentStatusToDone } from "../../api/appointment/update/updateAppointmentStatusToDone";
-import { getRoomsById } from "../../api/room/getRoomById";
 import { FaEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { getServiceById } from "../../api/service/getServiceById";
 import { getUserRole } from "../../utils/authUtils";
-import { updateAppointmentStatusToCancelled } from "../../api/appointment/update/updateAppointmentStatusToCancelled";
+import { appointmentService, roomService, serviceService, userService } from "../../api/services";
 
 function AppointmentCard({ appointment }) {
 
@@ -16,7 +11,7 @@ function AppointmentCard({ appointment }) {
     const [patientInfo, setPatientInfo] = useState({});
     const [roomInfo, setRoomInfo] = useState({});
     const [serviceInfo, setServiceInfo] = useState({});
-    const serviceId = parseInt(note);
+    const serviceId = Number.parseInt(note, 10);
     const role = getUserRole();
 
     const convertTimeFormat = (a) => {
@@ -38,57 +33,46 @@ function AppointmentCard({ appointment }) {
     };
 
     useEffect(() => {
-        const getDoctorInfo = async () => {
-            try {
-                const data = await getUserById(doctorId);
-                setDoctorInfo(data);
-            }
-            catch (error) {
-                console.error(error.message);
-            }
-        }
-        getDoctorInfo();
+        let mounted = true;
 
-        const getPatientInfo = async () => {
+        const fetchRelated = async () => {
             try {
-                const data = await getUserById(patientId);
-                setPatientInfo(data);
-            }
-            catch (error) {
-                console.error(error.message);
-            }
-        }
-        getPatientInfo();
+                const requests = [
+                    roomService.getById(roomId),
+                    role === "DOCTOR" ? userService.getById(patientId) : userService.getById(doctorId),
+                    Number.isNaN(serviceId) ? Promise.resolve(null) : serviceService.getById(serviceId),
+                ];
 
-        const getRoomInfo = async () => {
-            try {
-                const data = await getRoomsById(roomId);
-                setRoomInfo(data);
-            }
-            catch (error) {
-                console.error(error.message);
-            }
-        }
-        getRoomInfo();
+                const [roomData, personData, serviceData] = await Promise.all(requests);
+                if (!mounted) return;
 
-        const getService = async () => {
-            try {
-                const service = await getServiceById(serviceId);
-                setServiceInfo(service);
-            }
-            catch (error) {
+                setRoomInfo(roomData || {});
+                if (role === "DOCTOR") {
+                    setPatientInfo(personData || {});
+                } else {
+                    setDoctorInfo(personData || {});
+                }
+                setServiceInfo(serviceData || {});
+            } catch (error) {
                 console.error(error.message);
             }
+        };
+
+        if (roomId && (doctorId || patientId)) {
+            fetchRelated();
         }
-        getService();
-    }, []);
+
+        return () => {
+            mounted = false;
+        };
+    }, [doctorId, patientId, roomId, role, serviceId]);
 
     const navigate = useNavigate();
 
     const handleDeleteAppointment = async () => {
         if (confirm("Xác nhận xóa cuộc hẹn")) {
             try {
-                await deleteAppointment(id);
+                await appointmentService.remove(id);
             }
             catch (error) {
                 console.error(error.message);
@@ -99,7 +83,7 @@ function AppointmentCard({ appointment }) {
     const handleChangeAppointmentStatusToDone = async () => {
         if (confirm("Xác nhận đánh dấu cuộc hẹn đã xong")) {
             try {
-                await updateAppointmentStatusToDone(id);
+                await appointmentService.markDone(id);
             }
             catch (error) {
                 console.error(error.message);
@@ -110,7 +94,7 @@ function AppointmentCard({ appointment }) {
     const handleChangeAppointmentStatusToCancelled = async () => {
         if (confirm("Xác nhận hủy cuộc hẹn này")) {
             try {
-                await updateAppointmentStatusToCancelled(id);
+                await appointmentService.markCancelled(id);
             }
             catch (error) {
                 console.error(error.message);

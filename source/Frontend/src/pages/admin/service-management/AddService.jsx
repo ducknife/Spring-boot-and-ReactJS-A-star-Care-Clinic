@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { addService } from "../../../api/service/addService";
+import { serviceService } from "../../../api/services";
 
 const container = {
     hidden: { opacity: 0, y: 20 },
@@ -49,7 +49,7 @@ function AddService() {
             };
 
             if (confirm("Xác nhận thêm dịch vụ")) {
-                const response = await addService(data);
+                const response = await serviceService.create(data);
                 console.log(response);
                 navigate("/admin/services");
             }

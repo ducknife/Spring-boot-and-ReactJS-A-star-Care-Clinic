@@ -8,7 +8,7 @@ function Home() {
     const location = useLocation();
     const isRoot = location.pathname === "/";
     return (
-        <div className="bg-[#00278D]">
+        <div className="bg-[var(--surface)]">
             {isRoot ? <><HeroSection /> <AboutSection /> <ClinicServicesSection /></> : ""}
 
             <div className="">

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FiX, FiSend, FiUser, FiEdit3, FiCheck } from "react-icons/fi";
 import { getUserRole } from "../utils/authUtils";
 import logo from "../assets/images/logo/clinic.png";
-import { getAnswerFromGemini } from "../api/getAnswerFromGemini";
+import { geminiService } from "../api/services";
 
 function Chatbot() {
     const [isOpen, setIsOpen] = useState(false);
@@ -38,7 +38,7 @@ function Chatbot() {
         setIsLoading(true);
 
         try {
-            const response = await getAnswerFromGemini(input);
+            const response = await geminiService.ask(input);
             setMessages(prev => [...prev, {
                 role: "assistant",
                 content: response?.answer,

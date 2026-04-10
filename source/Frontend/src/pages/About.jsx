@@ -32,23 +32,22 @@ function About() {
     ];
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-sky-200 via-white to-sky-100">
-            {/* Main Content Container */}
-            <div className="max-w-5xl mx-auto px-6 py-16">
+        <div className="min-h-screen bg-[var(--surface)]">
+            <div className="mx-auto max-w-6xl px-6 py-16">
                 {/* Hero Section - No separate background */}
                 <motion.div
                     initial="hidden"
                     animate="show"
                     variants={fadeUp}
-                    className="text-center mb-16"
+                    className="mb-14 rounded-[32px] border border-cyan-100 bg-gradient-to-br from-[#03163d] via-[#06245f] to-[#0e4a82] p-10 text-center text-white shadow-2xl"
                 >
-                    <span className="text-sky-500 font-bold text-sm uppercase tracking-wider">
+                    <span className="font-bold text-sm uppercase tracking-[0.18em] text-cyan-200">
                         ABOUT US
                     </span>
-                    <h1 className="text-3xl md:text-5xl font-bold text-[#00278D] mt-4 mb-6">
+                    <h1 className="mt-4 mb-6 text-3xl font-bold md:text-5xl">
                         Sức khỏe của bạn là ưu tiên hàng đầu
                     </h1>
-                    <p className="text-slate-600 leading-relaxed text-lg max-w-3xl mx-auto">
+                    <p className="mx-auto max-w-3xl text-lg leading-relaxed text-cyan-50/90">
                         Phòng khám của chúng tôi được thành lập với mục tiêu mang đến nụ cười tươi đẹp, 
                         sức khỏe dồi dào cho mọi người. Chúng tôi cung cấp đa dạng các dịch vụ y tế chất lượng cao.
                     </p>
@@ -59,7 +58,7 @@ function About() {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5, delay: 0.3 }}
-                    className="flex justify-center mb-16"
+                    className="mb-14 flex justify-center"
                 >
                     <div className="relative">
                         <div className="w-32 h-32 rounded-full bg-[#00278D] flex items-center justify-center shadow-2xl">
@@ -85,7 +84,7 @@ function About() {
                     initial="hidden"
                     whileInView="show"
                     viewport={{ once: true }}
-                    className="space-y-6 mb-16"
+                    className="mb-14 space-y-5 rounded-[28px] border border-cyan-100 bg-white p-8 shadow-xl"
                 >
                     <motion.div 
                         variants={fadeUp}
@@ -143,7 +142,7 @@ function About() {
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
-                    className="text-slate-600 leading-relaxed text-center text-lg mb-16"
+                    className="mb-14 text-center text-lg leading-relaxed text-slate-600"
                 >
                     Hãy để nụ cười của bạn trở nên rạng rỡ, sức khỏe dồi dào với dịch vụ y tế 
                     chất lượng cao và đội ngũ chuyên gia tận tâm của chúng tôi.
@@ -155,13 +154,13 @@ function About() {
                     initial="hidden"
                     whileInView="show"
                     viewport={{ once: true }}
-                    className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16"
+                    className="mb-14 grid grid-cols-1 gap-6 md:grid-cols-3"
                 >
                     {achievements.map((item, idx) => (
                         <motion.div
                             key={idx}
                             variants={fadeUp}
-                            className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg p-8 text-center hover:shadow-xl transition-all"
+                            className="rounded-2xl border border-cyan-100 bg-white p-8 text-center shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl"
                         >
                             <div className="text-sky-600 flex justify-center mb-4">
                                 {item.icon}
@@ -178,7 +177,7 @@ function About() {
                     initial="hidden"
                     whileInView="show"
                     viewport={{ once: true }}
-                    className="mb-16"
+                    className="mb-14"
                 >
                     <h2 className="text-3xl font-bold text-[#00278D] text-center mb-10">
                         Giá trị cốt lõi
@@ -188,7 +187,7 @@ function About() {
                             <motion.div
                                 key={idx}
                                 variants={fadeUp}
-                                className="bg-white/60 backdrop-blur-sm rounded-xl p-6 hover:shadow-2xl shadow-xl transition-all"
+                                className="rounded-xl border border-cyan-100 bg-white p-6 shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl"
                             >
                                 <FiCheckCircle className="text-sky-600 text-3xl mb-3" />
                                 <h3 className="text-lg font-bold text-[#00278D] mb-2">
@@ -205,7 +204,7 @@ function About() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-center"
+                    className="rounded-[28px] border border-cyan-100 bg-white p-10 text-center shadow-xl"
                 >
                     <h2 className="text-3xl font-bold text-[#00278D] mb-4">
                         Đội ngũ chuyên môn
@@ -216,7 +215,7 @@ function About() {
                     </p>
                     <button 
                         onClick={() => navigate("/services")}
-                        className="bg-sky-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-sky-700 transition-colors shadow-lg hover:shadow-xl"
+                        className="rounded-xl bg-[var(--brand-navy)] px-8 py-3 font-semibold text-white shadow-lg transition hover:bg-sky-600"
                     >
                         Xem dịch vụ của chúng tôi
                     </button>

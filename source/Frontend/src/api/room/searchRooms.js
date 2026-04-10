@@ -1,15 +1,17 @@
-export async function searchRooms(searchParams = {}) {
-    const params = new URLSearchParams();
-    
-    if (searchParams.floor) {
-        params.append('floor', searchParams.floor);
-    }
+import { apiClient } from "../axiosClient";
 
-    const url = `http://localhost:8080/api/rooms/search${params.toString() ? `?${params.toString()}` : ''}`;
-    
-    const response = await fetch(url);
-    if (!response.ok) {
+export async function searchRooms(searchParams = {}) {
+    try {
+        const params = new URLSearchParams();
+
+        if (searchParams.floor) {
+            params.append('floor', searchParams.floor);
+        }
+
+        const { data } = await apiClient.get(`/rooms/search${params.toString() ? `?${params.toString()}` : ''}`);
+        return data;
+    }
+    catch (error) {
         throw new Error('Failed to search rooms');
     }
-    return response.json();
 }

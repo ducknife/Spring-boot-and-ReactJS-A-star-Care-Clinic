@@ -1,14 +1,7 @@
 import { useEffect, useState } from "react";
-import { FiUsers, FiActivity, FiSettings, FiCalendar, FiBarChart2 } from "react-icons/fi";
-import { getUsers } from "../../../api/user/getUsers";
-import { getTodayAppointments } from "../../../api/appointment/getTodayAppointments";
-import { getTodayPendingAppointments } from "../../../api/appointment/pending/getTodayPendingAppointments";
-import { getDoneAppointmentThisMonth } from "../../../api/appointment/done/getDoneAppointmentThisMonth";
-import { getServiceById } from "../../../api/service/getServiceById";
-import { getRecentActivities } from "../../../api/activity/getRecentActivities";
-import { NavLink } from "react-router-dom";
 import DashboardReportTable from "./DashboardReportTable";
 import { motion } from "framer-motion";
+import { activityService, appointmentService, serviceService, userService } from "../../../api/services";
 
 function Dashboard() {
 
@@ -43,7 +36,7 @@ function Dashboard() {
         /* Lấy người dùng */
         const getUserData = async () => {
             try {
-                const data = await getUsers();
+                const data = await userService.getAll();
                 setUsers(data);
             }
             catch (error) {
@@ -55,7 +48,7 @@ function Dashboard() {
         /* lấy cuộc hẹn hôm nay */
         const getAptToday = async () => {
             try {
-                const data = await getTodayAppointments();
+                const data = await appointmentService.getToday();
                 setAptToday(data);
             }
             catch (error) {
@@ -67,7 +60,7 @@ function Dashboard() {
         /* lấy cuộc hẹn sắp tới: status = "PENDING" */
         const getUpcommingAppointment = async () => {
             try {
-                const data = await getTodayPendingAppointments();
+                const data = await appointmentService.pendingToday();
                 setUpcommingApt(data);
             }
             catch (error) {
@@ -79,11 +72,11 @@ function Dashboard() {
         /* lấy doanh thu tháng này: từ mùng 1 tới hiện tại */
         const getMonthRevenue = async () => {
             try {
-                const data = await getDoneAppointmentThisMonth();
+                const data = await appointmentService.doneThisMonth();
                 var sum = 0;
                 for (const a of data) {
                     const serviceId = parseInt(a.note);
-                    const service = await getServiceById(serviceId);
+                    const service = await serviceService.getById(serviceId);
                     sum += service.price;
                 }
                 setMonthRevenue(sum);
@@ -97,7 +90,7 @@ function Dashboard() {
         /* lấy hoạt động gần dây */
         const getLogs = async () => {
             try {
-                const data = await getRecentActivities();
+                const data = await activityService.getRecent();
                 setLogs(data);
             }
             catch (error) {

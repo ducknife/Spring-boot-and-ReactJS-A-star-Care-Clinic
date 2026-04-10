@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { getServiceById } from "../../../api/service/getServiceById";
-import { updateService } from "../../../api/service/updateService";
+import { serviceService } from "../../../api/services";
 
 const container = {
     hidden: { opacity: 0, y: 20 },
@@ -34,7 +33,7 @@ function AdminEditService() {
     useEffect(() => {
         (async () => {
             try {
-                const data = await getServiceById(id);
+                const data = await serviceService.getById(id);
                 setForm({
                     name: data?.name,
                     price: data?.price,
@@ -69,7 +68,7 @@ function AdminEditService() {
             };
 
             if (confirm("Xác nhận lưu thay đổi")) {
-                await updateService(id, data);
+                await serviceService.update(id, data);
                 navigate("/admin/services");
             }
 

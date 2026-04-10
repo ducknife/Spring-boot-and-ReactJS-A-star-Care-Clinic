@@ -1,9 +1,9 @@
 package com.acare.backend.controller;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-
+import com.acare.backend.dto.ApiResponse;
+import com.acare.backend.entity.Room;
+import com.acare.backend.service.RoomService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,82 +15,43 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.acare.backend.entity.Room;
-import com.acare.backend.repository.RoomRepository;
-
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 
 @RestController
 @RequestMapping("/api/rooms")
 @RequiredArgsConstructor
 public class RoomController {
-    private final RoomRepository repo;
+    private final RoomService roomService;
 
     @GetMapping
     public List<Room> getRoom() {
-        List<Room> rooms = repo.findAll();
-        rooms.sort(Comparator.comparing((Room r) -> r.getLocation())
-        .thenComparing((r) -> r.getName()));
-        return rooms;
+        return roomService.getAllRooms();
     }
 
     @GetMapping("/search")
     public List<Room> searchRooms(
             @RequestParam(required = false) String floor) {
-        System.out.println("Search called with floor: " + floor);
-        List<Room> rooms = repo.findAll();
-        System.out.println("Total rooms before filter: " + rooms.size());
-        
-        // Filter by floor if provided
-        if (floor != null && !floor.isEmpty()) {
-            rooms = rooms.stream()
-                    .filter(r -> {
-                        boolean match = r.getLocation() != null && r.getLocation().contains(floor);
-                        System.out.println("Room: " + r.getName() + ", Location: " + r.getLocation() + ", Match: " + match);
-                        return match;
-                    })
-                    .collect(java.util.stream.Collectors.toList());
-            System.out.println("Rooms after filter: " + rooms.size());
-        }
-        
-        // Sort by location and name
-        rooms.sort(Comparator.comparing((Room r) -> r.getLocation())
-                .thenComparing((r) -> r.getName()));
-        return rooms;
+        return roomService.searchRooms(floor);
     }
 
-    // Lấy phòng dựa trên id 
     @GetMapping("/{id}")
-    public Optional<Room> getRoomById(@PathVariable Long id) {
-        return repo.findById(id);
+    public Room getRoomById(@PathVariable Long id) {
+        return roomService.getRoomById(id);
     }
 
-    // Thêm phòng 
     @PostMapping
-    public ResponseEntity<String> addRoom(@RequestBody Room newRoom) {
-        Optional<Room> rooms = repo.findByNameAndLocation(newRoom.getName(), newRoom.getLocation());
-        if (rooms.isPresent()) return ResponseEntity.ok("ROOM EXISTED");
-        repo.save(newRoom);
-        return ResponseEntity.ok("ADDED ROOM SUCCESSFULLY");
-    }
-    
-    // Xóa phòng theo id 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteRoom(@PathVariable Long id) {
-        repo.deleteById(id);
-        return ResponseEntity.ok("DELETED ROOM SUCCESSFULY");
+    public ResponseEntity<ApiResponse<Room>> addRoom(@RequestBody Room newRoom) {
+        return ResponseEntity.ok(roomService.addRoom(newRoom));
     }
 
-    // Cập nhật lại thông tin của phòng 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Object>> deleteRoom(@PathVariable Long id) {
+        return ResponseEntity.ok(roomService.deleteRoom(id));
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateRoom(@PathVariable Long id, @RequestBody Room update) {
-        Optional<Room> rooms = repo.findById(id);
-        Room room = rooms.get();
-        if (update.getRoomType() != null) room.setRoomType(update.getRoomType());
-        if (update.getLocation() != null) room.setLocation(update.getLocation());
-        if (update.getName() != null) room.setName(update.getName());
-        repo.save(room);
-        return ResponseEntity.ok("UPDATED ROOM SUCCESSFULLY");
+    public ResponseEntity<ApiResponse<Room>> updateRoom(@PathVariable Long id, @RequestBody Room update) {
+        return ResponseEntity.ok(roomService.updateRoom(id, update));
     }
 }

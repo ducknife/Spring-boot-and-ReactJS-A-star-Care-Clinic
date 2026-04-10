@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
-import { getUserById } from "../../../api/user/getUser";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";import { useNavigate, useParams } from "react-router-dom";
 import { motion, } from "framer-motion";
 import doctorImg from "../../../assets/images/doctor/doctor.jpg";
 import patientImg from "../../../assets/images/doctor/patient.jpg";
 import adminImg from "../../../assets/images/doctor/admin.jpg";
+import { userService } from "../../../api/services";
 
 const container = {
     hidden: { opacity: 0, y: 20 },
@@ -30,7 +29,7 @@ function AdminShowProfile() {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const data = await getUserById(id);
+                const data = await userService.getById(id);
                 setProfile(data);
             }
             catch (err) {

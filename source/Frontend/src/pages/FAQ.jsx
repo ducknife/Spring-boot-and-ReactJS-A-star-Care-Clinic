@@ -14,13 +14,13 @@ function FAQ() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-sky-200 via-white to-sky-100 py-16 px-6">
+        <div className="min-h-screen bg-[var(--surface)] py-16 px-6">
             {/* Header */}
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="text-center mb-16"
+                className="mx-auto mb-14 max-w-5xl rounded-[28px] bg-gradient-to-br from-[#03163d] via-[#06245f] to-[#0e4a82] p-10 text-center text-white shadow-2xl"
             >
                 <motion.div
                     initial={{ scale: 0 }}
@@ -28,12 +28,12 @@ function FAQ() {
                     transition={{ duration: 0.5, type: "spring" }}
                     className="inline-block mb-6"
                 >
-                    <FiHelpCircle className="text-sky-500 text-7xl mx-auto" />
+                    <FiHelpCircle className="mx-auto text-7xl text-cyan-200" />
                 </motion.div>
-                <h1 className="text-4xl md:text-5xl font-bold text-[#00278D] mt-4 mb-6">
+                <h1 className="mt-4 mb-6 text-4xl font-bold md:text-5xl">
                     Câu hỏi thường gặp
                 </h1>
-                <p className="text-slate-600 text-lg max-w-2xl mx-auto">
+                <p className="mx-auto max-w-2xl text-lg text-cyan-50/90">
                     Tìm câu trả lời cho các thắc mắc phổ biến về dịch vụ, tính năng và cách sử dụng hệ thống A<sup>*</sup>Care Clinic
                 </p>
             </motion.div>
@@ -48,7 +48,7 @@ function FAQ() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.4, delay: catIdx * 0.1 }}
-                            className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg p-8 hover:shadow-xl transition-all"
+                            className="rounded-2xl border border-cyan-100 bg-white p-8 shadow-lg transition-all hover:shadow-xl"
                         >
                             {/* Category Header */}
                             <div className="flex items-center gap-3 mb-6">
@@ -113,7 +113,7 @@ function FAQ() {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
-                className="max-w-3xl mx-auto mt-16 bg-[#00278D] rounded-2xl shadow-2xl p-10 text-center text-white"
+                className="mx-auto mt-16 max-w-3xl rounded-2xl bg-[var(--brand-navy)] p-10 text-center text-white shadow-2xl"
             >
                 <h3 className="text-3xl font-bold mb-4">
                     Không tìm thấy câu trả lời?
@@ -123,7 +123,7 @@ function FAQ() {
                 </p>
                 <a
                     href="/contact"
-                    className="inline-block bg-white text-[#00278D] px-8 py-3 rounded-lg font-semibold hover:bg-sky-50 transition-colors shadow-lg hover:shadow-xl"
+                    className="inline-block rounded-lg bg-white px-8 py-3 font-semibold text-[var(--brand-navy)] shadow-lg transition-colors hover:bg-sky-50 hover:shadow-xl"
                 >
                     Liên hệ với chúng tôi
                 </a>

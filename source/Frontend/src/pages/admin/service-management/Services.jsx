@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
 import { FiEye, FiEdit2, FiTrash2 } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
-import { getServices } from "../../../api/service/getServices";
-import { searchServices } from "../../../api/service/searchServices";
-import { deleteServiceById } from "../../../api/service/deleteService";
-import { FiSearch } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";import { FiSearch } from "react-icons/fi";
 import { motion } from "framer-motion";
+import { serviceService } from "../../../api/services";
 
 function AdminServiceManagement() {
     const [services, setServices] = useState([]);
@@ -23,7 +20,7 @@ function AdminServiceManagement() {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await getServices();
+                const response = await serviceService.getAll();
                 setServices(response);
             }
             catch (err) {
@@ -49,7 +46,7 @@ function AdminServiceManagement() {
     const handleSearch = async () => {
         setLoading(true);
         try {
-            const searchResults = await searchServices(searchParams);
+            const searchResults = await serviceService.search(searchParams);
             setServices(searchResults);
         } catch (err) {
             console.error("Error searching services:", err);
@@ -67,7 +64,7 @@ function AdminServiceManagement() {
         });
         setLoading(true);
         try {
-            const response = await getServices();
+            const response = await serviceService.getAll();
             setServices(response);
         }
         catch (err) {
@@ -81,7 +78,7 @@ function AdminServiceManagement() {
     const handleDelete = async (id) => {
         if (confirm("Xác nhận xóa dịch vụ?")) {
             try {
-                const response = await deleteServiceById(id);
+                const response = await serviceService.remove(id);
             }
             catch (error) {
                 alert("Lỗi xóa dịch vụ");

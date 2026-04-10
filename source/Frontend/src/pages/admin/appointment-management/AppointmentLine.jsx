@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
-import { FiEye, FiEdit2, FiTrash2 } from "react-icons/fi";
-import { getUserById } from "../../../api/user/getUser";
-import { getServiceById } from "../../../api/service/getServiceById";
-import { getRoomsById } from "../../../api/room/getRoomById";
+import { roomService, serviceService, userService } from "../../../api/services";
 
-function AppointmentLine({a, idx}) {
+function AppointmentLine({ a, idx }) {
 
     const [doctor, setDoctor] = useState({});
     const [patient, setPatient] = useState({});
@@ -23,51 +20,34 @@ function AppointmentLine({a, idx}) {
     }
 
     useEffect(() => {
-        const getDoctor = async () => {
-            try {
-                const data = await getUserById(a.doctorId);
-                setDoctor(data);
-                console.log(data);
-            }
-            catch (error) {
-                console.log(error.message);
-            }
-        }
-        getDoctor();
+        let mounted = true;
 
-        const getPatient = async () => {
+        const fetchRelated = async () => {
             try {
-                const data = await getUserById(a.patientId);
-                setPatient(data);
-            }
-            catch (error) {
-                console.log(error.message);
-            }
-        }
-        getPatient();
+                const serviceId = Number.parseInt(a.note, 10);
+                const [doctorData, patientData, roomData, serviceData] = await Promise.all([
+                    userService.getById(a.doctorId),
+                    userService.getById(a.patientId),
+                    roomService.getById(a.roomId),
+                    Number.isNaN(serviceId) ? Promise.resolve(null) : serviceService.getById(serviceId),
+                ]);
 
-        const getService = async () => {
-            try {
-                const data = await getServiceById(parseInt(a.note));
-                setService(data);
-            }
-            catch (error) {
+                if (!mounted) return;
+                setDoctor(doctorData || {});
+                setPatient(patientData || {});
+                setRoom(roomData || {});
+                setService(serviceData || {});
+            } catch (error) {
                 console.log(error.message);
             }
-        }
-        getService();
+        };
 
-        const getRoom = async () => {
-            try {
-                const data = await getRoomsById(a.roomId);
-                setRoom(data);
-            }
-            catch (error) {
-                console.log(error.message);
-            }
-        }
-        getRoom();
-    }, []);
+        fetchRelated();
+
+        return () => {
+            mounted = false;
+        };
+    }, [a.doctorId, a.patientId, a.roomId, a.note]);
     return (
         <>
             <tr

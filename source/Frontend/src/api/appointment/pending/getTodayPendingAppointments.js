@@ -1,10 +1,8 @@
+import { apiClient } from "../../axiosClient";
+
 export async function getTodayPendingAppointments() {
     try {
-        const getResponse = await fetch('http://localhost:8080/api/appointments/today/pending', {
-            method: "GET"
-        });
-        if (!getResponse.ok) throw new Error("Can't fetch API");
-        const data = await getResponse.json();
+        const { data } = await apiClient.get('/appointments/today/pending');
         return data;
     }
     catch (error) {

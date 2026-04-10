@@ -1,5 +1,5 @@
 
-import { FiArrowRight, FiHeart, FiActivity, FiCpu } from "react-icons/fi";
+import { FiArrowRight, FiHeart, FiCpu } from "react-icons/fi";
 import { MdOutlineMonitorHeart, MdOutlineLocalPharmacy } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -71,9 +71,8 @@ function ClinicServicesSection() {
     };
 
     return (
-        <section className="w-full bg-white py-16">
-            <div className="max-w-6xl mx-auto flex flex-col xl:flex-row gap-10 xl:gap-14 items-stretch">
-                {/* Left content */}
+        <section className="w-full bg-white py-20">
+            <div className="mx-auto flex max-w-7xl flex-col items-stretch gap-10 px-6 xl:flex-row xl:gap-14">
                 <motion.div 
                     className="flex-1"
                     initial="hidden"
@@ -82,31 +81,30 @@ function ClinicServicesSection() {
                     variants={containerVariants}
                 >
                     <motion.p 
-                        className="uppercase tracking-[0.25em] text-sky-500 font-semibold text-xs mb-3"
+                        className="mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-sky-500"
                         variants={itemVariants}
                     >
-                        providing outpatient clinic services
+                        our featured treatments
                     </motion.p>
                     <motion.h2 
-                        className="text-4xl xl:text-5xl font-bold text-[#00278D] leading-tight mb-4"
+                        className="mb-4 text-4xl font-bold leading-tight text-[var(--brand-navy)] xl:text-5xl"
                         variants={itemVariants}
                     >
-                        Chăm Sóc Ngoại Trú Hiện Đại
+                        Dịch vụ nổi bật
                         <br />
-                        Cá Nhân Hóa Cho Sức Khỏe Toàn Diện
+                        được cá nhân hóa theo từng hồ sơ
                     </motion.h2>
                     <motion.p 
-                        className="text-slate-500 max-w-xl mb-6"
+                        className="mb-6 max-w-xl text-slate-500"
                         variants={itemVariants}
                     >
-                        Hệ thống phòng khám đa khoa ngoại trú ứng dụng công nghệ số và AI:
-                        đặt lịch trực tuyến, hồ sơ sức khỏe điện tử, chẩn đoán hỗ trợ thông minh
-                        và theo dõi dài hạn cho từng bệnh nhân.
+                        Từ chăm sóc phòng ngừa, điều trị nha khoa chuyên sâu đến theo dõi định kỳ,
+                        mỗi dịch vụ đều được thiết kế để tối ưu hiệu quả điều trị và thời gian của bạn.
                     </motion.p>
 
                     {/* Rating + button */}
                     <motion.div 
-                        className="flex items-center justify-between gap-4 mb-8"
+                        className="mb-8 flex flex-wrap items-center justify-between gap-4"
                         variants={itemVariants}
                     >
                         <div className="flex items-center gap-3">
@@ -120,7 +118,7 @@ function ClinicServicesSection() {
                                     {"★ ★ ★ ★ ★"}
                                 </div>
                                 <p className="text-xs text-slate-500">
-                                    4.9/5 từ hơn 3.200 lượt đánh giá
+                                    4.9/5 từ hơn 3,200 lượt đánh giá
                                 </p>
                             </div>
                         </div>
@@ -142,10 +140,10 @@ function ClinicServicesSection() {
                         {clinicServices.map((s, i) => (
                             <motion.div
                                 key={i}
-                                className="group bg-sky-100 transition-all rounded-3xl px-5 py-5 flex flex-col gap-2 shadow-lg border border-sky-100"
+                                className="group flex flex-col gap-2 rounded-3xl border border-cyan-100 bg-gradient-to-br from-cyan-50 to-white px-5 py-5 shadow-md transition-all hover:-translate-y-1 hover:shadow-xl"
                                 variants={cardVariants}
                             >
-                                <div className="w-12 h-12 rounded-2xl bg-sky-500 flex items-center justify-center text-white transition">
+                                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-500 text-white transition group-hover:bg-[var(--brand-navy)]">
                                     {s.icon}
                                 </div>
                                 <h3 className="font-semibold text-[#00278D] text-base">
@@ -158,15 +156,14 @@ function ClinicServicesSection() {
                         ))}
                     </motion.div>
 
-                    {/* Faded OUR SERVICES text */}
                     <motion.div 
-                        className="mt-8 text-[40px] md:text-[52px] font-extrabold tracking-[0.15em] text-sky-100 select-none"
+                        className="mt-8 select-none text-[40px] font-extrabold tracking-[0.15em] text-cyan-100 md:text-[52px]"
                         initial={{ opacity: 0, x: -20 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, delay: 0.5 }}
                     >
-                        OUR SERVICES
+                        CARE PROGRAMS
                     </motion.div>
                 </motion.div>
 

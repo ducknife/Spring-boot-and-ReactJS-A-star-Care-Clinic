@@ -1,10 +1,14 @@
+import { apiClient } from "./axiosClient";
+
 export async function loginApi({ email, password }) {
-  const res = await fetch("http://localhost:8080/api/auth/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username: email, password }),
-  });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || "Đăng nhập thất bại");
-  return data;
+  try {
+    const { data } = await apiClient.post("/auth/login", {
+      username: email,
+      password,
+    });
+    return data;
+  } catch (error) {
+    const errorMessage = error.response?.data?.error || "Dang nhap that bai";
+    throw new Error(errorMessage);
+  }
 }

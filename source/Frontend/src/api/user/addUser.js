@@ -1,14 +1,9 @@
+import { apiClient } from "../axiosClient";
+
 export async function addUser(user) {
     try {
-        const postResponse = await fetch("http://localhost:8080/api/users/register", {
-            method: "POST",
-            headers: {
-                "Content-Type" : "application/json"
-            },
-            body: JSON.stringify(user)
-        })
-        if (!postResponse.ok) throw new Error("Can't add patient");
-        return await postResponse.json();
+        const { data } = await apiClient.post("/users/register", user);
+        return data;
     }
     catch (error) {
         console.error(error.message);

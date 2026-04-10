@@ -1,10 +1,8 @@
+import { apiClient } from "../axiosClient";
+
 export async function getRooms() {
     try {
-        const getResponse = await fetch("http://localhost:8080/api/rooms", {
-            method: "GET"
-        });
-        if (!getResponse.ok) throw new Error("Can't fetch API");
-        const data = await getResponse.json();
+        const { data } = await apiClient.get('/rooms');
         return data;
     } 
     catch (error) {

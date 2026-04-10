@@ -1,10 +1,5 @@
 import { useEffect, useState } from "react";
-import { getUserId } from "../../utils/authUtils";
-import { addAppointment } from "../../api/appointment/addAppoinment";
-import { getDoctors } from "../../api/user/getDoctors";
-import { getRooms } from "../../api/room/getRoom";
-import { getServices } from "../../api/service/getServices";
-import { motion } from "framer-motion";
+import { appointmentService, roomService, serviceService, userService } from "../../api/services";
 
 const container = {
     hidden: { opacity: 0, y: 20 },
@@ -39,7 +34,7 @@ function Booking() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const data = await addAppointment(form);
+            const data = await appointmentService.create(form);
             if (data.status == 404) throw new Error(data.message);
             setMessage("Đặt lịch thành công với mã " + data.data.id);
         }
@@ -50,19 +45,19 @@ function Booking() {
 
     useEffect(() => {
         const fetchDoctor = async () => {
-            const data = await getDoctors();
+            const data = await userService.getDoctors();
             setDoctors(data);
         }
         fetchDoctor();
 
         const fetchRoom = async () => {
-            const data = await getRooms();
+            const data = await roomService.getAll();
             setRooms(data);
         }
         fetchRoom();
 
         const fetchService = async () => {
-            const data = await getServices();
+            const data = await serviceService.getAll();
             setServices(data);
         }
         fetchService();

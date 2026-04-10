@@ -1,10 +1,8 @@
+import { apiClient } from "../axiosClient";
+
 export async function getRecentActivities() {
     try {
-        const getResponse = await fetch('http://localhost:8080/api/activities/recent', {
-            method: "GET"
-        });
-        if (!getResponse.ok) throw new Error("Can't fetch API");
-        const data = await getResponse.json();
+        const { data } = await apiClient.get('/activities/recent');
         return data;
     }
     catch (error) {

@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import { FiEye, FiEdit2, FiTrash2, FiSearch } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
-import { getRooms } from "../../../api/room/getRoom";
-import { searchRooms } from "../../../api/room/searchRooms";
-import { deleteRoom } from "../../../api/room/deleteRoom";
-import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";import { motion } from "framer-motion";
+import { roomService } from "../../../api/services";
 
 function AdminRoomManagement() {
     const [rooms, setRooms] = useState([]);
@@ -19,7 +16,7 @@ function AdminRoomManagement() {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await getRooms();
+                const response = await roomService.getAll();
                 setRooms(response);
             }
             catch (err) {
@@ -45,7 +42,7 @@ function AdminRoomManagement() {
     const handleSearch = async () => {
         setLoading(true);
         try {
-            const searchResults = await searchRooms(searchParams);
+            const searchResults = await roomService.search(searchParams);
             setRooms(searchResults);
         } catch (err) {
             console.error("Error searching rooms:", err);
@@ -61,7 +58,7 @@ function AdminRoomManagement() {
         });
         setLoading(true);
         try {
-            const response = await getRooms();
+            const response = await roomService.getAll();
             setRooms(response);
         } catch (err) {
             console.error("Error fetching rooms:", err);
@@ -73,7 +70,7 @@ function AdminRoomManagement() {
     const handleDelete = async (id) => {
         if (confirm("Xác nhận xóa phòng?")) {
             try {
-                const data = await deleteRoom(id);
+                const data = await roomService.remove(id);
             }
             catch (error) {
                 alert("Lỗi xóa phòng");

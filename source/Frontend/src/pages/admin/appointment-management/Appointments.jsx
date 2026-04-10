@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { deleteServiceById } from "../../../api/service/deleteService";
-import { getAppointments } from "../../../api/appointment/getAppointments";
-import { filterAppointments } from "../../../api/appointment/filterAppointments";
-import { getDoctors } from "../../../api/user/getDoctors";
-import { getRooms } from "../../../api/room/getRoom";
-import AppointmentLine from "./AppointmentLine";
 import { motion } from "framer-motion";
+import { appointmentService, roomService, userService } from "../../../api/services";
 
 function AdminAppointmentManagement() {
     const [appointments, setAppointments] = useState([]);
@@ -29,8 +24,8 @@ function AdminAppointmentManagement() {
         const fetchData = async () => {
             try {
                 const [doctorsData, roomsData] = await Promise.all([
-                    getDoctors(),
-                    getRooms()
+                    userService.getDoctors(),
+                    roomService.getAll()
                 ]);
                 setDoctors(doctorsData || []);
                 setRooms(roomsData || []);
@@ -45,7 +40,7 @@ function AdminAppointmentManagement() {
     useEffect(() => {
         const fetchAppointments = async () => {
             try {
-                const response = await getAppointments();
+                const response = await appointmentService.getAll();
                 setAppointments(response);
             }
             catch (err) {
@@ -72,7 +67,7 @@ function AdminAppointmentManagement() {
     const handleSearch = async () => {
         setLoading(true);
         try {
-            const filteredData = await filterAppointments(filters);
+            const filteredData = await appointmentService.filter(filters);
             setAppointments(filteredData);
         } 
         catch (err) {
@@ -94,7 +89,7 @@ function AdminAppointmentManagement() {
         });
         setLoading(true);
         try {
-            const response = await getAppointments();
+            const response = await appointmentService.getAll();
             setAppointments(response);
         } 
         catch (err) {
@@ -104,19 +99,6 @@ function AdminAppointmentManagement() {
             setLoading(false);
         }
     };
-
-
-    const handleDelete = async (id) => {
-        if (confirm("Xác nhận xóa dịch vụ?")) {
-            try {
-                const response = await deleteServiceById(id);
-            }
-            catch (error) {
-                alert("Lỗi xóa dịch vụ");
-            }
-        }
-    };
-
     return (
         <motion.div 
             initial={{ opacity: 0 }}

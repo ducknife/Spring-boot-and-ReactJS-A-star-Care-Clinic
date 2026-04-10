@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { addRoom } from "../../../api/room/addRoom";
-import { getRooms } from "../../../api/room/getRoom";
+import { roomService } from "../../../api/services";
 
 const container = {
     hidden: { opacity: 0, y: 20 },
@@ -48,7 +47,7 @@ function AddRoom() {
             };
 
             if (confirm("Xác nhận thêm phòng")) {
-                const response = await addRoom(data);
+                const response = await roomService.create(data);
                 navigate("/admin/rooms");
             }
 

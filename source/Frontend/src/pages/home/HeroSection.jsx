@@ -2,108 +2,93 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { getUserRole } from "../../utils/authUtils";
 import team from "../../assets/images/doctor/teams.jpg";
+import { FiCalendar, FiShield, FiClock } from "react-icons/fi";
 
 export default function HeroSection() {
 
     const navigate = useNavigate();
     const role = getUserRole() || "GUEST";
     return (
-        <section className="flex flex-col md:flex-row items-center justify-between px-10 md:px-20 py-16 bg-[#00278D] overflow-hidden">
-            {/* Bên trái: nội dung */}
+        <section className="relative overflow-hidden bg-gradient-to-br from-[#02163f] via-[#06245f] to-[#0d4e8c] px-6 py-16 md:px-14 xl:px-24">
+            <div className="absolute -left-28 -top-24 h-72 w-72 rounded-full bg-cyan-400/20 blur-3xl" />
+            <div className="absolute -bottom-28 right-0 h-80 w-80 rounded-full bg-sky-200/20 blur-3xl" />
+
+            <div className="mx-auto grid w-full max-w-7xl items-center gap-10 lg:grid-cols-2">
             <motion.div
-                className="flex-1 text-left space-y-6"
+                className="space-y-7"
                 initial={{ opacity: 0, x: -80 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 1, ease: "easeOut" }}
             >
-                <p className="text-white font-semibold uppercase tracking-wide">
-                    A*Care Clinic – Chăm sóc sức khỏe toàn diện cho bạn
+                <p className="inline-flex rounded-full border border-cyan-200/30 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100">
+                    Dental & General Clinic
                 </p>
 
                 <motion.h1
-                    className="text-5xl md:text-6xl font-bold text-white leading-tight"
+                    className="text-4xl font-bold leading-tight text-white md:text-5xl xl:text-6xl"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3, duration: 0.8 }}
                 >
-                    <p className="mb-3">Khám chữa bệnh</p>
-                    <span className="text-[#00278D] p-2 bg-white rounded-2xl">Chuyên nghiệp & Tận tâm</span>
+                    Nha khoa thẩm mỹ và
+                    <span className="ml-2 inline-block rounded-2xl bg-white px-3 py-1 text-[var(--brand-navy)]">
+                        điều trị toàn diện
+                    </span>
                 </motion.h1>
 
-                <motion.div
-                    className="flex flex-wrap items-center gap-6 mt-8"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6, duration: 0.8 }}
-                >
-                    <div className="flex items-center space-x-3">
-                        <div className="p-3 bg-sky-100 rounded-full shadow-md">
-                            <img
-                                src="https://cdn-icons-png.flaticon.com/512/2966/2966488.png"
-                                alt="Khám tổng quát"
-                                className="w-6 h-6"
-                            />
-                        </div>
-                        <p className="text-white font-semibold">Khám tổng quát & chuyên khoa</p>
-                    </div>
-
-                    <div className="border-l border-white/30 h-8"></div>
-
-                    <div className="flex items-center space-x-3">
-                        <div className="p-3 bg-white/90 rounded-full shadow-md">
-                            <img
-                                src="https://cdn-icons-png.flaticon.com/512/2966/2966430.png"
-                                alt="Xét nghiệm & chẩn đoán"
-                                className="w-6 h-6"
-                            />
-                        </div>
-                        <p className="text-white font-semibold">Xét nghiệm – Chẩn đoán hình ảnh</p>
-                    </div>
-
-                    <div className="border-l border-white/30 h-8"></div>
-
-                    <div className="flex items-center space-x-3">
-                        <div className="p-3 bg-white/90 rounded-full shadow-md">
-                            <img
-                                src="https://cdn-icons-png.flaticon.com/512/2966/2966471.png"
-                                alt="Dịch vụ cấp cứu"
-                                className="w-6 h-6"
-                            />
-                        </div>
-                        <p className="text-white font-semibold">Dịch vụ cấp cứu & theo dõi sức khỏe</p>
-                    </div>
-                </motion.div>
-
                 <motion.p
-                    className="text-white/90 max-w-md leading-relaxed"
+                    className="max-w-xl leading-relaxed text-sky-50/90"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1, duration: 1 }}
                 >
-                    <span className="font-semibold text-white">A*Care Clinic</span> – phòng khám đa khoa
-                    ứng dụng công nghệ hiện đại, đội ngũ bác sĩ giàu kinh nghiệm,
-                    mang đến giải pháp chăm sóc sức khỏe toàn diện, nhanh chóng và hiệu quả
-                    cho mọi lứa tuổi và nhu cầu.
+                    A*Care Clinic mang đến trải nghiệm điều trị nhẹ nhàng, minh bạch kế hoạch chăm sóc và theo dõi lâu dài.
+                    Đội ngũ bác sĩ chuyên môn cao cùng hệ thống chẩn đoán hiện đại giúp bạn an tâm trong từng lần thăm khám.
                 </motion.p>
 
+                <motion.div
+                    className="grid gap-3 text-sm text-cyan-50 sm:grid-cols-3"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.6, duration: 0.8 }}
+                >
+                    <div className="flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 p-3">
+                        <FiShield />
+                        Tiêu chuẩn vô trùng cao
+                    </div>
+                    <div className="flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 p-3">
+                        <FiClock />
+                        Đặt lịch nhanh trong 60s
+                    </div>
+                    <div className="flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 p-3">
+                        <FiCalendar />
+                        Nhắc lịch tái khám tự động
+                    </div>
+                </motion.div>
+
                 {role == "PATIENT" || role == "GUEST" ? <motion.div
-                    className="mt-8"
+                    className="mt-2 flex flex-wrap gap-3"
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 1.2, duration: 0.6 }}
                 >
-                    <a
-                        href="/patient/book"
-                        className="inline-block px-6 py-3 bg-white text-[#00278D] font-semibold rounded-lg shadow-md hover:bg-slate-200 hover:shadow-lg transition-all duration-300"
+                    <button
+                        onClick={() => navigate("/patient/book")}
+                        className="rounded-xl bg-white px-6 py-3 font-semibold text-[var(--brand-navy)] shadow-md transition hover:bg-slate-100"
                     >
-                        Đăng ký lịch khám ngay
-                    </a>
+                        Đặt lịch hẹn ngay
+                    </button>
+                    <button
+                        onClick={() => navigate("/services")}
+                        className="rounded-xl border border-white/30 bg-white/10 px-6 py-3 font-semibold text-white transition hover:bg-white/20"
+                    >
+                        Xem dịch vụ nổi bật
+                    </button>
                 </motion.div> : ""}
             </motion.div>
 
-            {/* Bên phải: hình ảnh */}
             <motion.div
-                className="flex-1 mt-10 md:mt-0 md:ml-10"
+                className="relative"
                 initial={{ opacity: 0, x: 100 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 1, ease: "easeOut" }}
@@ -111,9 +96,15 @@ export default function HeroSection() {
                 <img
                     src={team}
                     alt="Đội ngũ bác sĩ A*Care Clinic"
-                    className="rounded-lg border border-white border-5 rounded-br-[20%] shadow-2xl w-full object-cover"
+                    className="h-[520px] w-full rounded-[32px] object-cover shadow-2xl ring-1 ring-white/30"
                 />
+
+                <div className="absolute -bottom-6 left-6 rounded-2xl bg-white p-4 shadow-xl">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-500">Rated Care</p>
+                    <p className="mt-1 text-lg font-bold text-[var(--brand-navy)]">4.9/5 từ 3.2k khách hàng</p>
+                </div>
             </motion.div>
+            </div>
         </section>
     );
 }

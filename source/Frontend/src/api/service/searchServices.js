@@ -1,3 +1,5 @@
+import { apiClient } from "../axiosClient";
+
 export async function searchServices(searchParams = {}) {
     try {
         const params = new URLSearchParams();
@@ -9,14 +11,7 @@ export async function searchServices(searchParams = {}) {
             params.append('active', searchParams.active);
         }
 
-        const url = `http://localhost:8080/api/services/search${params.toString() ? '?' + params.toString() : ''}`;
-        
-        const getResponse = await fetch(url, {
-            method: "GET"
-        });
-        
-        if (!getResponse.ok) throw new Error("Can't fetch API");
-        const data = await getResponse.json();
+        const { data } = await apiClient.get(`/services/search${params.toString() ? '?' + params.toString() : ''}`);
         return data;
     }
     catch (error) {

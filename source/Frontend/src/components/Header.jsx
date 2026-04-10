@@ -6,9 +6,9 @@ import { headerListByRole } from "../data/headerList";
 import { useSidebarContext } from "../contexts/SideBarContext";
 import logo from "../assets/images/logo/logo_png.png";
 import { NavLink, useNavigate } from "react-router-dom";
-import { getUserId, getUserRole, isLoggedIn } from "../utils/authUtils";
+import { getUserId, getUserRole } from "../utils/authUtils";
 import { useEffect, useState } from "react";
-import { getPendingAppointmentByPatientId } from "../api/appointment/pending/getPendingAppointmentByPatientId";
+import { appointmentService } from "../api/services";
 
 function Header() {
     const { toggleSidebar } = useSidebarContext();
@@ -25,7 +25,7 @@ function Header() {
             try {
                 const patientId = getUserId();
                 if (patientId != null) {
-                    const pendingAppointments = await getPendingAppointmentByPatientId(patientId);
+                    const pendingAppointments = await appointmentService.pendingByPatientId(patientId);
                     pendingAppointments.length >= 1 ? setIsFill(true) : setIsFill(false);
                 }
             }
@@ -38,9 +38,10 @@ function Header() {
 
 
     return (
-        <header className="bg-white h-20 md:h-25 flex md:flex-row items-center justify-around sticky top-0 z-10">
-            <img src={logo} alt="logo" className="logo h-40 w-60 bg-cover cursor-pointer" onClick={() => navigate("/")} />
-            <div className="header-menu hidden gap-x-8 text-[#00278D] flex-wrap md:flex">
+        <header className="sticky top-0 z-20 border-b border-cyan-100 bg-white/95 backdrop-blur">
+            <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 md:px-8">
+            <img src={logo} alt="logo" className="logo h-28 w-44 bg-cover cursor-pointer object-contain" onClick={() => navigate("/")} />
+            <div className="header-menu hidden flex-wrap gap-x-8 text-[#00278D] md:flex">
                 {headerList.map((item) => (
                     <div key={item.id} className="header-items relative group">
                         <NavLink to={item.to} className={({ isActive }) => `${isActive ? 'text-sky-500' : ''} font-extrabold flex items-center gap-1 hover:text-sky-500 transition-colors font-bold`}>
@@ -93,20 +94,21 @@ function Header() {
                     </div>
                 ))}
             </div>
-            <div className="other-header-items items-center gap-x-4 text-sky-500 flex">
-                {role == "PATIENT" ? (<div className="text-xl cursor-pointer hidden md:block"><NavLink to={"/patient/cart"}>{!isFill ? <FiShoppingCart /> : <BsFillCartCheckFill />}</NavLink></div>) : ""}
+            <div className="other-header-items flex items-center gap-x-4 text-sky-500">
+                {role == "PATIENT" ? (<div className="hidden cursor-pointer text-xl md:block"><NavLink to={"/patient/cart"}>{!isFill ? <FiShoppingCart /> : <BsFillCartCheckFill />}</NavLink></div>) : ""}
                 <div className="phone gap-x-2 hidden md:flex">
-                    <div className="text-xl w-12 h-12 flex justify-center items-center rounded-full p-3 border border-gray-300 text-sky-500">
+                    <div className="text-xl w-11 h-11 flex justify-center items-center rounded-full p-3 border border-cyan-200 bg-cyan-50 text-sky-500">
                         <TbPhone />
                     </div>
-                    <div className="flex flex-col pr-4 font-bold">
-                        <p className="text-sky-500">Hotline Number:</p>
-                        <a href="tel:0379330721" className="text-xl text-[#00278D] cursor-pointer">+84-379-330-721</a>
+                    <div className="flex flex-col pr-2">
+                        <p className="text-xs uppercase tracking-[0.14em] text-slate-500">Emergency Line</p>
+                        <a href="tel:0379330721" className="text-lg font-bold text-[#00278D] cursor-pointer">+84-379-330-721</a>
                     </div>
                 </div>
                 <button onClick={toggleSidebar} className="text-2xl border border-gray-300 rounded-sm p-2 cursor-pointer hover:border-sky-500 transition duration-500 ease-in-out">
                     <RiMenuFill />
                 </button>
+            </div>
             </div>
         </header>
     );

@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
-import { FiEye, FiEdit2, FiTrash2 } from "react-icons/fi";
-import { getUsers } from "../../../api/user/getUsers";
-import { searchUsers } from "../../../api/user/searchUsers";
-import { useNavigate } from "react-router-dom";
-import { deleteUserById } from "../../../api/user/deleteUser";
-import { IoMdPersonAdd } from "react-icons/io";
+import { FiEye, FiEdit2, FiTrash2 } from "react-icons/fi";import { useNavigate } from "react-router-dom";import { IoMdPersonAdd } from "react-icons/io";
 import { FiSearch } from "react-icons/fi";
 import { motion } from "framer-motion";
+import { userService } from "../../../api/services";
 
 function AdminUserManagement() {
     const [users, setUsers] = useState([]);
@@ -24,7 +20,7 @@ function AdminUserManagement() {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await getUsers();
+                const response = await userService.getAll();
                 setUsers(response);
             }
             catch (err) {
@@ -50,7 +46,7 @@ function AdminUserManagement() {
     const handleSearch = async () => {
         setLoading(true);
         try {
-            const searchResults = await searchUsers(searchParams);
+            const searchResults = await userService.search(searchParams);
             setUsers(searchResults);
         } 
         catch (err) {
@@ -70,7 +66,7 @@ function AdminUserManagement() {
         });
         setLoading(true);
         try {
-            const response = await getUsers();
+            const response = await userService.getAll();
             setUsers(response);
         } catch (err) {
             console.error("Error fetching users:", err);
@@ -82,7 +78,7 @@ function AdminUserManagement() {
     const handleDelete = async (id) => {
         if (confirm("Xác nhận xóa người dùng?")) {
             try {
-                const response = await deleteUserById(id);
+                const response = await userService.remove(id);
             }
             catch (error) {
                 alert("Lỗi xóa người dùng");

@@ -125,7 +125,7 @@ function Instruction() {
                                 <motion.div
                                     key={idx}
                                     variants={fadeUp}
-                                    className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg p-8 hover:shadow-xl transition-all"
+                                    className="rounded-2xl border border-cyan-100 bg-white p-8 shadow-lg transition-all hover:shadow-xl"
                                 >
                                     <div className="text-sky-600 mb-4">{step.icon}</div>
                                     <h3 className="text-xl font-bold text-[#00278D] mb-3">
@@ -138,7 +138,7 @@ function Instruction() {
                         <div className="text-center mt-8">
                             <a
                                 href="/patient/book"
-                                className="inline-block bg-sky-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-sky-700 transition-colors shadow-lg"
+                                className="inline-block rounded-lg bg-[var(--brand-navy)] px-8 py-3 font-semibold text-white shadow-lg transition-colors hover:bg-sky-700"
                             >
                                 Đặt lịch ngay
                             </a>
@@ -160,7 +160,7 @@ function Instruction() {
                                 <motion.div
                                     key={idx}
                                     variants={fadeUp}
-                                    className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg p-8 text-center hover:shadow-xl transition-all"
+                                    className="rounded-2xl border border-cyan-100 bg-white p-8 text-center shadow-lg transition-all hover:shadow-xl"
                                 >
                                     <div className="text-sky-600 flex justify-center mb-4">
                                         {step.icon}
@@ -189,7 +189,7 @@ function Instruction() {
                                 <motion.div
                                     key={idx}
                                     variants={fadeUp}
-                                    className="bg-white/60 backdrop-blur-sm rounded-xl shadow-lg p-6 hover:shadow-xl transition-all"
+                                    className="rounded-xl border border-cyan-100 bg-white p-6 shadow-lg transition-all hover:shadow-xl"
                                 >
                                     <div className="text-sky-600 mb-4">{feature.icon}</div>
                                     <h3 className="text-lg font-bold text-[#00278D] mb-2">
@@ -216,7 +216,7 @@ function Instruction() {
                                 <motion.div
                                     key={idx}
                                     variants={fadeUp}
-                                    className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg p-8 text-center hover:shadow-xl transition-all"
+                                    className="rounded-2xl border border-cyan-100 bg-white p-8 text-center shadow-lg transition-all hover:shadow-xl"
                                 >
                                     <div className="text-sky-600 flex justify-center mb-4">
                                         {step.icon}
@@ -231,7 +231,7 @@ function Instruction() {
                         <div className="text-center mt-8">
                             <a
                                 href="/login"
-                                className="inline-block bg-sky-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-sky-700 transition-colors shadow-lg"
+                                className="inline-block rounded-lg bg-[var(--brand-navy)] px-8 py-3 font-semibold text-white shadow-lg transition-colors hover:bg-sky-700"
                             >
                                 Đăng nhập ngay
                             </a>
@@ -242,21 +242,21 @@ function Instruction() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-sky-200 via-white to-sky-100 py-12 px-6">
+        <div className="min-h-screen bg-[var(--surface)] py-12 px-6">
             {/* Header */}
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="text-center mb-16"
+                className="mx-auto mb-14 max-w-6xl rounded-[28px] bg-gradient-to-br from-[#03163d] via-[#06245f] to-[#0e4a82] p-10 text-center text-white shadow-2xl"
             >
-                <span className="text-sky-500 font-bold text-sm uppercase tracking-wider">
+                <span className="font-bold text-sm uppercase tracking-[0.18em] text-cyan-200">
                     INSTRUCTION
                 </span>
-                <h1 className="text-4xl md:text-5xl font-bold text-[#00278D] mt-4 mb-6">
+                <h1 className="mt-4 mb-6 text-4xl font-bold md:text-5xl">
                     Nếu bạn là {getRoleTitle()}
                 </h1>
-                <p className="text-slate-600 text-lg max-w-3xl mx-auto">
+                <p className="mx-auto max-w-3xl text-lg text-cyan-50/90">
                     {role === "GUEST" 
                         ? "Hướng dẫn sử dụng hệ thống dành cho bạn"
                         : `Hướng dẫn chi tiết các tính năng và cách sử dụng hệ thống dành cho ${getRoleTitle()}`
@@ -273,7 +273,7 @@ function Instruction() {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
-                className="max-w-4xl mx-auto mt-16 bg-sky-50/60 backdrop-blur-sm rounded-2xl p-8"
+                className="mx-auto mt-16 max-w-4xl rounded-2xl border border-cyan-100 bg-white p-8 shadow-lg"
             >
                 <h3 className="text-2xl font-bold text-[#00278D] mb-4">
                     Lưu ý quan trọng

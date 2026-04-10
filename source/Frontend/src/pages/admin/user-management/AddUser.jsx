@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-import { addUser } from "../../../api/user/addUser";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { userService } from "../../../api/services";
 
 const ymdToDmy = (ymd) => {
     if (!ymd) return "";
@@ -39,7 +38,7 @@ function AddUser() {
                 ...form,
                 birthDate: ymdToDmy(form.birthDate),
             };
-            const data = await addUser(payload);
+            const data = await userService.create(payload);
             setMessage(data.message);
             if (data.success) navigate("/admin/users");
         }

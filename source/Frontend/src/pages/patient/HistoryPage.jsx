@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { getNotPendingAppointmentByPatientId } from "../../api/appointment/done/getNotPendingAppointmentByPatiendId";
 import { getUserId } from "../../utils/authUtils";
 import AppointmentCard from "./AppointmentCard";
 import { motion } from "framer-motion";
+import { appointmentService } from "../../api/services";
 
 const item = {
     hidden: { opacity: 0, y: 8 },
@@ -25,9 +25,14 @@ function HistoryPage() {
     const [data, setData] = useState([]);
 
     useEffect(() => {
+        if (!id) {
+            setLoading(false);
+            return;
+        }
+
         const getDoneAppointments = async () => {
             try {
-                const DoneAppointments = await getNotPendingAppointmentByPatientId(id);
+                const DoneAppointments = await appointmentService.notPendingByPatientId(id);
                 setData(DoneAppointments);
             }
             catch (err) {
@@ -39,7 +44,7 @@ function HistoryPage() {
         };
         getDoneAppointments();
 
-    }, []);
+    }, [id]);
 
     if (loading) return <p className="text-center text-gray-500 py-10">Đang tải...</p>;
 
@@ -60,9 +65,7 @@ function HistoryPage() {
                     <div className="bg-white w-fit h-fit p-3 rounded-2xl shadow-lg">
                         <h1 className="text-4xl font-bold text-[#00278D]">Lịch sử dịch vụ</h1>
                     </div>
-
                 </motion.div>
-
                 {data.length > 0 ? (
                     <motion.div
                         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"

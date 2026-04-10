@@ -1,14 +1,8 @@
+import { apiClient } from "../axiosClient";
+
 export async function addService(service) {
     try {
-        const postResponse = await fetch("http://localhost:8080/api/services", {
-            method: "POST",
-            headers: {
-                "Content-Type" : "application/json"
-            },
-            body: JSON.stringify(service)
-        });
-        if (!postResponse.ok) throw new Error("Can't fetch API");
-        const data = await postResponse.json();
+        const { data } = await apiClient.post("/services", service);
         return data;
     }
     catch (error) {

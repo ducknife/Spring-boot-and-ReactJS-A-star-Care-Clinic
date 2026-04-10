@@ -4,10 +4,8 @@ import { GrFormSchedule } from "react-icons/gr";
 import { GiTrophyCup } from "react-icons/gi";
 import { RiServiceLine } from "react-icons/ri";
 import { getUserId } from "../../utils/authUtils";
-import { getServiceById } from "../../api/service/getServiceById";
-import { getDoneAppointmentThisMonthByDoctorId } from "../../api/appointment/done/getDoneAppointmentThisMonthByDoctorId";
-import { getUserById } from "../../api/user/getUser";
 import { motion } from "framer-motion";
+import { appointmentService, serviceService, userService } from "../../api/services";
 
 const container = {
     hidden: { opacity: 0, y: 20 },
@@ -44,59 +42,36 @@ function Statistic() {
     const [recentEncounters, setRecentEncounters] = useState([]);
 
     useEffect(() => {
+        if (!doctorId) return;
+
         const getAppointment = async () => {
             try {
-                const data = await getDoneAppointmentThisMonthByDoctorId(doctorId);
+                const data = await appointmentService.doneThisMonthByDoctorId(doctorId);
                 const totalAppointments = data.length;
-                const patientIdSet = new Set(data.map(a => a.patientId));
+                const patientIdSet = new Set(data.map((a) => a.patientId));
                 const totalPatients = patientIdSet.size;
                 const freq = new Map();
+                let totalRevenue = 0;
+                const recents = await Promise.all(
+                    data.map(async (a) => {
+                        const serviceId = Number.parseInt(a.note, 10);
+                        const [serviceResp, patientResp] = await Promise.all([
+                            Number.isNaN(serviceId) ? Promise.resolve(null) : serviceService.getById(serviceId),
+                            userService.getById(a.patientId),
+                        ]);
 
-                const recents = []
-                var totalRevenue = 0;
-                for (const a of data) {
-                    const serviceId = parseInt(a.note);
-                    const patientId = a.patientId;
+                        const serviceName = serviceResp?.name || "Khac";
+                        totalRevenue += serviceResp?.price || 0;
+                        freq.set(serviceName, (freq.get(serviceName) || 0) + 1);
 
-                    /* Lưu ca khám gần đây */
-                    const recent = {
-                        startTime: a.startTime,
-                        serviceName: "",
-                        price: "",
-                        patientName: "",
-                    }
-
-                    const getService = async () => {
-                        try {
-                            const response = await getServiceById(serviceId);
-                            totalRevenue += response?.price || 0;
-                            /* lấy dịch vụ nổi bật nhất */
-                            const name = response.name || "Khác";
-                            freq.set(name, (freq.get(name) || 0) + 1);
-
-                            recent.serviceName = response?.name;
-                            recent.price = response?.price;
-                        }
-                        catch (error) {
-                            console.error(error.message);
-                        }
-                    }
-                    await getService();
-
-                    const getPatient = async () => {
-                        try {
-                            const response = await getUserById(patientId);
-                            recent.patientName = response?.fullName;
-                        }
-                        catch (error) {
-                            console.error(error.message);
-                        }
-                    }
-                    await getPatient();
-
-                    /* lấy 5 ca gần nhất */
-                    recents.push(recent);
-                }
+                        return {
+                            startTime: a.startTime,
+                            serviceName,
+                            price: serviceResp?.price || 0,
+                            patientName: patientResp?.fullName || "",
+                        };
+                    })
+                );
 
                 setRecentEncounters(recents);
 
@@ -122,7 +97,7 @@ function Statistic() {
             }
         }
         getAppointment();
-    }, []);
+    }, [doctorId]);
 
     return (
         <section className="bg-gradient-to-tl from-sky-50 via-white to-sky-500 min-h-[40vh] text-slate-700 p-10 ">

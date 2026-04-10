@@ -110,22 +110,22 @@ function Contact() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-sky-100 via-white to-sky-50">
+        <div className="min-h-screen bg-[var(--surface)]">
             <div className="max-w-7xl mx-auto px-6 py-16">
                 {/* Header */}
                 <motion.div
                     initial="hidden"
                     animate="show"
                     variants={fadeUp}
-                    className="text-center mb-16"
+                    className="mb-14 rounded-[28px] bg-gradient-to-br from-[#03163d] via-[#06245f] to-[#0e4a82] p-10 text-center text-white shadow-2xl"
                 >
-                    <span className="text-sky-500 font-bold text-sm uppercase tracking-wider">
+                    <span className="font-bold text-sm uppercase tracking-[0.18em] text-cyan-200">
                         GET IN TOUCH
                     </span>
-                    <h1 className="text-4xl md:text-5xl font-bold text-[#00278D] mt-4 mb-6">
+                    <h1 className="text-4xl md:text-5xl font-bold mt-4 mb-6">
                         Liên hệ với chúng tôi
                     </h1>
-                    <p className="text-slate-600 text-lg max-w-2xl mx-auto">
+                    <p className="mx-auto max-w-2xl text-lg text-cyan-50/90">
                         Chúng tôi luôn sẵn sàng lắng nghe và hỗ trợ bạn. Hãy để lại thông tin hoặc liên hệ trực tiếp.
                     </p>
                 </motion.div>
@@ -142,7 +142,7 @@ function Contact() {
                         <motion.div
                             key={idx}
                             variants={fadeUp}
-                            className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all text-center"
+                            className="rounded-2xl border border-cyan-100 bg-white p-6 text-center shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl"
                         >
                             <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${item.color} flex items-center justify-center text-white mx-auto mb-4 shadow-lg`}>
                                 {item.icon}
@@ -165,7 +165,7 @@ function Contact() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
-                        className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg p-8"
+                        className="rounded-2xl border border-cyan-100 bg-white p-8 shadow-lg"
                     >
                         <h2 className="text-2xl font-bold text-[#00278D] mb-6">
                             Gửi tin nhắn cho chúng tôi
@@ -274,7 +274,7 @@ function Contact() {
                                     whileTap={{ scale: 0.98 }}
                                     type="submit"
                                     disabled={isLoading}
-                                    className="w-full bg-sky-500 text-white px-6 py-3 rounded-lg font-semibold hover:from-sky-600 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--brand-navy)] px-6 py-3 font-semibold text-white shadow-lg transition-all hover:bg-sky-700 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
                                 >
                                     {isLoading ? (
                                         <>
@@ -301,7 +301,7 @@ function Contact() {
                         className="space-y-6"
                     >
                         {/* Map */}
-                        <div className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden h-[400px]">
+                        <div className="h-[400px] overflow-hidden rounded-2xl border border-cyan-100 bg-white shadow-lg">
                             <iframe
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3725.292401303918!2d105.78484157503009!3d20.980912980656463!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135accdd0921797%3A0xe2ed991c5990d2b1!2zOTZBIMSQLiBUcuG6p24gUGjDuiwgUC4gTeG7mSBMYW8sIEjDoCDEkMO0bmcsIEjDoCBO4buZaSwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2sus!4v1763947011415!5m2!1svi!2sus"
                                 width="100%"
@@ -314,7 +314,7 @@ function Contact() {
                         </div>
 
                         {/* Why Contact Us */}
-                        <div className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg p-8">
+                        <div className="rounded-2xl border border-cyan-100 bg-white p-8 shadow-lg">
                             <h3 className="text-xl font-bold text-[#00278D] mb-4">
                                 Tại sao nên liên hệ với chúng tôi?
                             </h3>

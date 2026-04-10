@@ -1,3 +1,5 @@
+import { apiClient } from "../axiosClient";
+
 export async function filterAppointments(filters = {}) {
     try {
         const params = new URLSearchParams();
@@ -8,14 +10,7 @@ export async function filterAppointments(filters = {}) {
         if (filters.status) params.append('status', filters.status);
         if (filters.roomName) params.append('roomName', filters.roomName);
 
-        const url = `http://localhost:8080/api/appointments/filter${params.toString() ? '?' + params.toString() : ''}`;
-        
-        const getResponse = await fetch(url, {
-            method: "GET"
-        });
-        
-        if (!getResponse.ok) throw new Error("Can't fetch API");
-        const data = await getResponse.json();
+        const { data } = await apiClient.get(`/appointments/filter${params.toString() ? '?' + params.toString() : ''}`);
         return data;
     }
     catch (error) {

@@ -15,9 +15,14 @@
 
 :root {
     --main-font: 'Inter';
+    --brand-navy: #06245f;
+    --brand-cyan: #0ea5e9;
+    --brand-mint: #ecfeff;
+    --surface: #f8fdff;
 }
 
 body {
     font-family: var(--main-font);
-    background-color: #F6FCFF;
+    background-color: var(--surface);
+    color: #0f172a;
 }
