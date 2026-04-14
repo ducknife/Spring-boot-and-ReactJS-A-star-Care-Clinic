@@ -240,7 +240,7 @@ function Cart() {
             {detailTarget ? (
                 <div className="fixed inset-0 z-[1000] bg-black/40 p-4 flex items-center justify-center" onClick={() => setDetailTarget(null)}>
                     <div className="w-full max-w-2xl rounded-2xl bg-white border border-slate-200 shadow-2xl p-6" onClick={(event) => event.stopPropagation()}>
-                        <h3 className="text-2xl font-bold text-[#00278D]">Hóa đơn lịch hẹn</h3>
+                        <h3 className="text-2xl font-bold text-[#00278D]">Chi tiết lịch hẹn</h3>
                         <p className="text-sm text-slate-500 mt-1">Mã lịch hẹn: #{detailTarget.appointment.id}</p>
 
                         <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
