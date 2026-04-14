@@ -28,31 +28,9 @@ function Contact() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const resolveEnv = (...keys) => {
-        for (const key of keys) {
-            const raw = import.meta.env[key];
-            if (typeof raw === "string" && raw.trim()) {
-                return raw.trim();
-            }
-        }
-        return "";
-    };
-
-    const EMAILJS_SERVICE_ID = resolveEnv(
-        "VITE_EMAILJS_SERVICE_ID",
-        "NEXT_PUBLIC_EMAILJS_SERVICE_ID",
-        "EMAILJS_SERVICE_ID",
-    );
-    const EMAILJS_TEMPLATE_ID = resolveEnv(
-        "VITE_EMAILJS_TEMPLATE_ID",
-        "NEXT_PUBLIC_EMAILJS_TEMPLATE_ID",
-        "EMAILJS_TEMPLATE_ID",
-    );
-    const EMAILJS_PUBLIC_KEY = resolveEnv(
-        "VITE_EMAILJS_PUBLIC_KEY",
-        "NEXT_PUBLIC_EMAILJS_PUBLIC_KEY",
-        "EMAILJS_PUBLIC_KEY",
-    );
+    const EMAILJS_SERVICE_ID = import.meta.env.EMAILJS_SERVICE_ID;
+    const EMAILJS_TEMPLATE_ID = import.meta.env.EMAILJS_TEMPLATE_ID;
+    const EMAILJS_PUBLIC_KEY = import.meta.env.EMAILJS_PUBLIC_KEY;
 
     const contactInfo = [
         {
@@ -98,7 +76,7 @@ function Contact() {
 
         setIsLoading(true);
         setError(null);
-        
+
         // Chuẩn bị dữ liệu email
         const payload = {
             from_name: formData.name,
@@ -115,25 +93,25 @@ function Contact() {
             payload,
             EMAILJS_PUBLIC_KEY
         )
-        .then(() => {
-            setIsSubmitted(true);
-            setIsLoading(false);
-            setTimeout(() => {
-                setIsSubmitted(false);
-                setFormData({
-                    name: "",
-                    email: "",
-                    phone: "",
-                    subject: "",
-                    message: ""
-                });
-            }, 3000);
-        })
-        .catch((error) => {
-            console.error("Lỗi gửi email:", error);
-            setError("Có lỗi xảy ra. Vui lòng thử lại sau.");
-            setIsLoading(false);
-        });
+            .then(() => {
+                setIsSubmitted(true);
+                setIsLoading(false);
+                setTimeout(() => {
+                    setIsSubmitted(false);
+                    setFormData({
+                        name: "",
+                        email: "",
+                        phone: "",
+                        subject: "",
+                        message: ""
+                    });
+                }, 3000);
+            })
+            .catch((error) => {
+                console.error("Lỗi gửi email:", error);
+                setError("Có lỗi xảy ra. Vui lòng thử lại sau.");
+                setIsLoading(false);
+            });
     };
 
     return (
@@ -197,7 +175,7 @@ function Contact() {
                         <h2 className="text-2xl font-bold text-[#00278D] mb-6">
                             Gửi tin nhắn cho chúng tôi
                         </h2>
-                        
+
                         {isSubmitted ? (
                             <motion.div
                                 initial={{ scale: 0 }}
