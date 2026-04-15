@@ -3,6 +3,10 @@ package com.acare.backend.controller;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -124,6 +128,27 @@ public class AppointmentController {
     @GetMapping("/not-pending/patient/{patientId}")
     public ResponseEntity<List<AppointmentResponse>> getDoneAppoinmentsByPatientId(@PathVariable Long patientId) {
         return ResponseEntity.ok(appointmentService.getNotPendingByPatientId(patientId).stream().map(AppointmentResponse::from).toList());
+    }
+
+    @GetMapping("/history/patient/{patientId}")
+    public ResponseEntity<Page<AppointmentResponse>> getHistoryByPatientId(
+            @PathVariable Long patientId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "4") int size,
+            @RequestParam(defaultValue = "startTime,desc") String[] sort) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("startTime")));
+        if (sort != null && sort.length > 0 && sort[0] != null && !sort[0].isBlank()) {
+            String[] sortParts = sort[0].split(",");
+            String property = sortParts[0];
+            Sort.Direction direction = (sortParts.length > 1 && "asc".equalsIgnoreCase(sortParts[1]))
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC;
+            pageable = PageRequest.of(page, size, Sort.by(new Sort.Order(direction, property)));
+        }
+
+        Page<AppointmentResponse> response = appointmentService.getDoneByPatientId(patientId, pageable)
+                .map(AppointmentResponse::from);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/pending/doctor/{doctorId}")

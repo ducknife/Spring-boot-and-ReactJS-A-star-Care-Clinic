@@ -7,8 +7,8 @@ export const userService = {
     async getById(id) {
         return httpGet(`/users/${id}`);
     },
-    async getDoctors() {
-        return httpGetPublic("/users/doctor");
+    async getDoctors(params = {}) {
+        return httpGetPublic(`/users/doctor${toQueryString(params)}`);
     },
     async getPatients() {
         return httpGet(`/users${toQueryString({ role: "PATIENT" })}`);

@@ -13,6 +13,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -255,6 +257,10 @@ public class AppointmentService {
         done.addAll(cancelled);
         done.sort(Comparator.comparing(Appointment::getStartTime));
         return done;
+    }
+
+    public Page<Appointment> getDoneByPatientId(Long patientId, Pageable pageable) {
+        return appointmentRepository.findByPatientIdAndStatus(patientId, AppointmentStatus.DONE, pageable);
     }
 
     public List<Appointment> getPendingByDoctorId(Long doctorId) {

@@ -36,16 +36,15 @@ function Sidebar() {
     <>
       <div
         onClick={toggleSidebar}
-        className={`fixed inset-0 bg-black/40 transition-opacity z-40 ${isOpen ? "opacity-100 visible" : "opacity-0 invisible"
+        className={`fixed inset-0 transition-opacity z-1000 ${isOpen ? "opacity-100 visible" : "opacity-0 invisible"
           }`}
       />
       <aside
-        className={`fixed top-0 left-0 h-full w-80 bg-white shadow-xl z-50 transition-transform duration-300 ${isOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed top-0 left-0 h-full w-80 bg-white shadow-xl z-10000 transition-transform duration-300 ${isOpen ? "translate-x-0" : "-translate-x-full"
           }`}
       >
         <div className="p-4 flex justify-between items-center pt-0">
           <img src={logo} alt="logo" className="logo bg-cover w-45 h-30" />
-          <button onClick={toggleSidebar} className="flex items-center text-xl cursor-pointer h-12 w-12 bg-[var(--brand-600)] text-white p-4 rounded-full font-extrabold">✕</button>
         </div>
         <div className="about-us text-[var(--brand-navy)] p-10 pt-0 pb-5">
           <h2 className="text-2xl font-black">Về chúng tôi</h2>

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { getUserRole } from "../../utils/authUtils";
-import team from "../../assets/images/doctor/teams.jpg";
+import team from "../../assets/images/doctor/team.png";
 import { FiCalendar, FiShield, FiClock } from "react-icons/fi";
 
 export default function HeroSection() {

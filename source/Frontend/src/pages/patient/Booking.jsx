@@ -7,6 +7,13 @@ import CustomDropdown from "../../components/CustomDropdown";
 import ActionModal from "../../components/ActionModal";
 import { animatePageEnter } from "../../utils/animeAnimations";
 
+const toLocalIsoDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+};
+
 export default function Booking() {
     const [services, setServices] = useState([]);
     const [selectedServiceId, setSelectedServiceId] = useState("");
@@ -38,7 +45,7 @@ export default function Booking() {
     const weekdayOptions = useMemo(() => {
         const result = [];
         const cursor = new Date();
-        const todayIso = new Date().toISOString().split("T")[0];
+        const todayIso = toLocalIsoDate(new Date());
 
         while (result.length < 10) {
             const day = cursor.getDay();
@@ -46,7 +53,7 @@ export default function Booking() {
             if (!isWeekend) {
                 const dd = String(cursor.getDate()).padStart(2, "0");
                 const mm = String(cursor.getMonth() + 1).padStart(2, "0");
-                const value = cursor.toISOString().split("T")[0];
+                const value = toLocalIsoDate(cursor);
                 const label = value === todayIso ? `Hôm nay - ${dd}/${mm}` : `Thứ ${day + 1} - ${dd}/${mm}`;
                 result.push({ label, value, weekdayName: ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"][day] });
             }
@@ -147,7 +154,7 @@ export default function Booking() {
                 setDoctors(data || []);
 
                 // Set each doctor default date to the nearest allowed weekday in the future.
-                const today = new Date().toISOString().split('T')[0];
+                const today = toLocalIsoDate(new Date());
                 const initialDates = {};
                 (data || []).forEach(doc => {
                     const options = getDateOptionsForDoctor(doc);

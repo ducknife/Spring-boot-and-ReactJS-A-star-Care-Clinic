@@ -22,6 +22,8 @@ function HistoryPage() {
     const id = getUserId();
     const [loading, setLoading] = useState(true);
     const [refreshKey, setRefreshKey] = useState(0);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
     const [appointments, setAppointments] = useState([]);
     const [patientInfo, setPatientInfo] = useState(null);
     const [doctorMap, setDoctorMap] = useState({});
@@ -30,6 +32,7 @@ function HistoryPage() {
 
     useEffect(() => {
         const handleAppointmentChanged = () => {
+            setCurrentPage(0);
             setRefreshKey((prev) => prev + 1);
         };
 
@@ -43,27 +46,63 @@ function HistoryPage() {
             return;
         }
 
-        const getDoneAppointments = async () => {
+        const getPatientInfo = async () => {
             try {
-                const doneAppointments = await appointmentService.notPendingByPatientId(id);
-                const normalized = (doneAppointments || [])
-                    .filter((item) => item?.status === "DONE")
-                    .sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
+                const patient = await userService.getById(id);
+                setPatientInfo(patient || null);
+            } catch {
+                setPatientInfo(null);
+            }
+        };
 
+        getPatientInfo();
+    }, [id]);
+
+    useEffect(() => {
+        if (!id) {
+            setLoading(false);
+            return;
+        }
+
+        const getDoneAppointments = async () => {
+            setLoading(true);
+            try {
+                const pageResponse = await appointmentService.historyByPatientId(id, {
+                    page: currentPage,
+                    size: 4,
+                    sort: "startTime,desc",
+                });
+
+                const normalized = pageResponse?.content || [];
                 setAppointments(normalized);
-
-                try {
-                    const patient = await userService.getById(id);
-                    setPatientInfo(patient || null);
-                } catch {
-                    setPatientInfo(null);
-                }
+                setTotalPages(pageResponse?.totalPages || 0);
 
                 const doctorIds = [...new Set(normalized.map((item) => item.doctorId).filter(Boolean))];
                 const serviceIds = [...new Set(normalized.map((item) => Number(item.serviceId ?? item.note)).filter((value) => !Number.isNaN(value)))];
 
                 const [doctorResponses, serviceResponses] = await Promise.all([
-                    Promise.all(doctorIds.map((doctorId) => userService.getById(doctorId))),
+                    Promise.all(
+                        doctorIds.map(async (doctorId) => {
+                            const [doctorResult, profileResult] = await Promise.allSettled([
+                                userService.getById(doctorId),
+                                userService.getDoctorProfile(doctorId),
+                            ]);
+
+                            const doctor = doctorResult.status === "fulfilled" ? doctorResult.value : null;
+                            const profile = profileResult.status === "fulfilled" ? profileResult.value : null;
+
+                            if (!doctor?.id) {
+                                return null;
+                            }
+
+                            return {
+                                ...doctor,
+                                clinicLocation: profile?.clinicLocation || doctor?.clinicLocation || "",
+                                workingDays: profile?.workingDays || doctor?.workingDays || "",
+                                specialty: profile?.specialty || doctor?.specialty || "",
+                            };
+                        })
+                    ),
                     Promise.all(serviceIds.map((serviceId) => serviceService.getById(serviceId))),
                 ]);
 
@@ -83,6 +122,8 @@ function HistoryPage() {
             }
             catch (err) {
                 console.log(err.message);
+                setAppointments([]);
+                setTotalPages(0);
             }
             finally {
                 setLoading(false);
@@ -90,7 +131,7 @@ function HistoryPage() {
         };
         getDoneAppointments();
 
-    }, [id, refreshKey]);
+    }, [id, refreshKey, currentPage]);
 
     if (loading) return <p className="text-center text-gray-500 py-10">Đang tải...</p>;
 
@@ -104,8 +145,9 @@ function HistoryPage() {
                 </div>
 
                 {appointments.length > 0 ? (
-                    <div className="space-y-4">
-                        {appointments.map((appointment) => {
+                    <>
+                        <div className="space-y-4">
+                            {appointments.map((appointment) => {
                             const doctor = doctorMap[appointment.doctorId] || {};
                             const serviceId = Number(appointment.serviceId ?? appointment.note);
                             const service = serviceMap[serviceId] || {};
@@ -132,6 +174,10 @@ function HistoryPage() {
                                         </div>
                                     </div>
 
+                                    <div className="mt-3 text-sm text-slate-600">
+                                        <span className="font-semibold">Phòng khám:</span> {doctor.clinicLocation || "Đang cập nhật"}
+                                    </div>
+
                                     <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
                                         <div className="text-sm text-slate-600">
                                             <span className="font-semibold">Phương thức thanh toán:</span> {paymentMethodLabel}
@@ -146,8 +192,43 @@ function HistoryPage() {
                                     </div>
                                 </div>
                             );
-                        })}
-                    </div>
+                            })}
+                        </div>
+
+                        {totalPages > 1 ? (
+                            <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
+                                <button
+                                    type="button"
+                                    disabled={currentPage === 0}
+                                    onClick={() => setCurrentPage((prev) => Math.max(0, prev - 1))}
+                                    className="rounded-md border border-slate-300 px-3 py-1.5 text-sm disabled:opacity-50"
+                                >
+                                    Trước
+                                </button>
+                                {Array.from({ length: totalPages }).map((_, index) => (
+                                    <button
+                                        key={index}
+                                        type="button"
+                                        onClick={() => setCurrentPage(index)}
+                                        className={`rounded-md px-3 py-1.5 text-sm border ${currentPage === index
+                                            ? "bg-[#00278D] text-white border-[#00278D]"
+                                            : "border-slate-300 text-slate-700 hover:bg-slate-100"
+                                            }`}
+                                    >
+                                        {index + 1}
+                                    </button>
+                                ))}
+                                <button
+                                    type="button"
+                                    disabled={currentPage >= totalPages - 1}
+                                    onClick={() => setCurrentPage((prev) => Math.min(totalPages - 1, prev + 1))}
+                                    className="rounded-md border border-slate-300 px-3 py-1.5 text-sm disabled:opacity-50"
+                                >
+                                    Sau
+                                </button>
+                            </div>
+                        ) : null}
+                    </>
                 ) : (
                     <p className="text-xl text-[#00278D]">
                         {"Chưa có lịch hẹn nào hoàn thành."}
@@ -192,6 +273,10 @@ function HistoryPage() {
                                 <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
                                     <p className="text-slate-500 mb-1">Phương thức thanh toán</p>
                                     <p className="font-semibold text-slate-800">{paymentMethodLabel}</p>
+                                </div>
+                                <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                                    <p className="text-slate-500 mb-1">Phòng khám</p>
+                                    <p className="font-semibold text-slate-800">{detailTarget.doctor?.clinicLocation || "Đang cập nhật"}</p>
                                 </div>
                                 <div className="rounded-xl border border-slate-200 bg-white p-4 md:col-span-2">
                                     <p className="text-slate-500 mb-1">Ghi chú</p>

@@ -3,9 +3,23 @@ import { motion } from "framer-motion";
 import { FiArrowLeft, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import DoctorCard from "../components/DoctorCard";
-import { getDoctorsWithProfiles } from "../utils/doctorCatalog";
+import { userService } from "../api";
 
-const DOCTORS_PER_PAGE = 10;
+const DOCTORS_PER_PAGE = 4;
+
+const normalizeDoctors = (payload) => {
+    if (Array.isArray(payload)) return payload;
+    if (Array.isArray(payload?.content)) return payload.content;
+    if (Array.isArray(payload?.data)) return payload.data;
+    return [];
+};
+
+const normalizeTotalPages = (payload, fallbackLength) => {
+    if (Number.isFinite(payload?.totalPages)) {
+        return Math.max(1, payload.totalPages);
+    }
+    return Math.max(1, Math.ceil(fallbackLength / DOCTORS_PER_PAGE));
+};
 
 function Doctors() {
     const navigate = useNavigate();
@@ -13,13 +27,9 @@ function Doctors() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
 
-    const totalPages = Math.max(1, Math.ceil(doctors.length / DOCTORS_PER_PAGE));
-
-    const pagedDoctors = useMemo(() => {
-        const start = (currentPage - 1) * DOCTORS_PER_PAGE;
-        return doctors.slice(start, start + DOCTORS_PER_PAGE);
-    }, [currentPage, doctors]);
+    const pagedDoctors = useMemo(() => doctors, [doctors]);
 
     useEffect(() => {
         if (currentPage > totalPages) {
@@ -28,27 +38,29 @@ function Doctors() {
     }, [currentPage, totalPages]);
 
     useEffect(() => {
-        let active = true;
-
         const loadDoctors = async () => {
             try {
-                const data = await getDoctorsWithProfiles();
-                if (!active) return;
-                setDoctors(data);
-                setCurrentPage(1);
+                setLoading(true);
+                setError("");
+
+                const payload = await userService.getDoctors({
+                    page: Math.max(0, currentPage - 1),
+                    size: DOCTORS_PER_PAGE,
+                    sort: "fullName,asc",
+                });
+
+                const content = normalizeDoctors(payload);
+                setDoctors(content);
+                setTotalPages(normalizeTotalPages(payload, content.length));
             } catch (err) {
-                if (!active) return;
                 setError(err?.message || "Không thể tải danh sách bác sĩ");
             } finally {
-                if (active) setLoading(false);
+                setLoading(false);
             }
         };
 
         loadDoctors();
-        return () => {
-            active = false;
-        };
-    }, []);
+    }, [currentPage]);
 
     if (loading) {
         return (

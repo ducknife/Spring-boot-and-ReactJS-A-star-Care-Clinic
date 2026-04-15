@@ -3,6 +3,9 @@ package com.acare.backend.controller;
 import java.util.Comparator;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,9 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.acare.backend.dto.ApiResponse;
 import com.acare.backend.dto.ApiResponseMapper;
-import com.acare.backend.dto.user.DoctorPublicResponse;
 import com.acare.backend.dto.user.DoctorProfileResponse;
 import com.acare.backend.dto.user.DoctorProfileUpdateRequest;
+import com.acare.backend.dto.user.DoctorPublicResponse;
 import com.acare.backend.dto.user.UserCreateRequest;
 import com.acare.backend.dto.user.UserResponse;
 import com.acare.backend.dto.user.UserUpdateRequest;
@@ -79,8 +82,9 @@ public class UserController {
     }
 
     @GetMapping("/doctor")
-    public ResponseEntity<List<DoctorPublicResponse>> getDoctors() {
-        return ResponseEntity.ok(userService.getDoctors());
+    public ResponseEntity<Page<DoctorPublicResponse>> getDoctors(
+            @PageableDefault(size = 4, sort = "fullName") Pageable pageable) {
+        return ResponseEntity.ok(userService.getDoctors(pageable));
     }
 
     @GetMapping("/patient")

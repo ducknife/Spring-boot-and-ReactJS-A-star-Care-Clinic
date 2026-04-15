@@ -7,18 +7,21 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.acare.backend.dto.ApiResponse;
-import com.acare.backend.dto.user.DoctorPublicResponse;
 import com.acare.backend.dto.user.DoctorProfileResponse;
 import com.acare.backend.dto.user.DoctorProfileUpdateRequest;
+import com.acare.backend.dto.user.DoctorPublicResponse;
 import com.acare.backend.dto.user.UserCreateRequest;
 import com.acare.backend.dto.user.UserUpdateRequest;
 import com.acare.backend.entity.DoctorProfile;
@@ -59,10 +62,11 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("Khong tim thay nguoi dung voi id=" + id));
     }
 
-    public List<DoctorPublicResponse> getDoctors() {
-        List<User> doctors = userRepository.findByRole(UserRole.DOCTOR);
+    public Page<DoctorPublicResponse> getDoctors(Pageable pageable) {
+        Page<User> doctorPage = userRepository.findByRole(UserRole.DOCTOR, pageable);
+        List<User> doctors = doctorPage.getContent();
         if (doctors.isEmpty()) {
-            return List.of();
+            return new PageImpl<>(List.of(), pageable, doctorPage.getTotalElements());
         }
 
         List<Long> userIds = doctors.stream().map(User::getId).toList();
@@ -70,10 +74,11 @@ public class UserService {
         doctorProfileRepository.findByUserIdIn(userIds)
                 .forEach(profile -> profileByUserId.put(profile.getUserId(), profile));
 
-        return doctors.stream()
+        List<DoctorPublicResponse> content = doctors.stream()
                 .map(user -> DoctorPublicResponse.from(user, profileByUserId.get(user.getId())))
-                .sorted(Comparator.comparing(DoctorPublicResponse::getFullName, Comparator.nullsLast(String::compareToIgnoreCase)))
                 .toList();
+
+        return new PageImpl<>(content, pageable, doctorPage.getTotalElements());
     }
 
     public List<User> getPatients() {

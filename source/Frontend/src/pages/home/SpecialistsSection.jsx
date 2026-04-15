@@ -43,18 +43,7 @@ export default function SpecialistsSection() {
                     </p>
                 </div>
 
-                <div className="mb-8 flex justify-center">
-                    <button
-                        type="button"
-                        onClick={() => navigate("/doctors")}
-                        className="inline-flex items-center gap-2 rounded-xl bg-[var(--brand-600)] px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-colors hover:bg-[var(--brand-700)]"
-                    >
-                        Xem danh sách bác sĩ
-                        <FiArrowRight className="h-4 w-4" />
-                    </button>
-                </div>
-
-                <div className="flex gap-6 overflow-x-auto pb-6 snap-x snap-mandatory md:grid md:grid-cols-2 md:overflow-visible lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+                <div className="flex gap-6 overflow-x-auto pb-6 snap-x snap-mandatory md:grid md:grid-cols-2 md:overflow-visible lg:grid-cols-3 xl:grid-cols-4">
                     {doctors.map((doctor, idx) => (
                         <motion.div
                             key={doctor.id}
@@ -67,6 +56,16 @@ export default function SpecialistsSection() {
                             <DoctorCard doctor={doctor} />
                         </motion.div>
                     ))}
+                </div>
+                <div className="mt-8 flex justify-center">
+                    <button
+                        type="button"
+                        onClick={() => navigate("/doctors")}
+                        className="inline-flex items-center gap-2 rounded-xl bg-[var(--brand-600)] px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-colors hover:bg-[var(--brand-700)]"
+                    >
+                        Xem danh sách bác sĩ
+                        <FiArrowRight className="h-4 w-4" />
+                    </button>
                 </div>
             </div>
         </section>

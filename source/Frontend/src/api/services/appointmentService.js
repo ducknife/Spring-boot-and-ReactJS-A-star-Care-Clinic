@@ -86,6 +86,9 @@ export const appointmentService = {
     async notPendingByPatientId(id) {
         return httpGet(`/appointments${toQueryString({ patientId: id, pending: false })}`);
     },
+    async historyByPatientId(id, params = {}) {
+        return httpGet(`/appointments/history/patient/${id}${toQueryString(params)}`);
+    },
     async getDoctorDashboard(filters = {}) {
         return httpGet(`/doctor/statistics/dashboard${toQueryString(filters)}`);
     },

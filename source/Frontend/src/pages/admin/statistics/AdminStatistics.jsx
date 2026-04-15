@@ -151,12 +151,16 @@ function AdminStatistics() {
             const [appointmentData, serviceData, doctorData] = await Promise.all([
                 appointmentService.filter({ status: "DONE" }),
                 serviceService.getAll(),
-                userService.getDoctors(),
+                userService.getDoctors({ page: 0, size: 200, sort: "fullName,asc" }),
             ]);
 
             const resolvedAppointments = Array.isArray(appointmentData) ? appointmentData : [];
             const resolvedServices = Array.isArray(serviceData) ? serviceData : [];
-            const resolvedDoctors = Array.isArray(doctorData) ? doctorData : [];
+            const resolvedDoctors = Array.isArray(doctorData)
+                ? doctorData
+                : Array.isArray(doctorData?.content)
+                    ? doctorData.content
+                    : [];
 
             setAppointments(resolvedAppointments);
             setServices(resolvedServices);
