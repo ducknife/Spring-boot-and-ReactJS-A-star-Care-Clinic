@@ -28,7 +28,7 @@ export default function HeroSection() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3, duration: 0.8 }}
                     >
-                        <span className="text-white">Nha khoa thẩm mỹ và</span>
+                        <span className="text-white font-bold">Nha khoa thẩm mỹ và</span>
                         <span className="ml-2 inline-block rounded-lg bg-white px-3 py-1 text-[var(--brand-navy)]">
                             điều trị toàn diện
                         </span>
