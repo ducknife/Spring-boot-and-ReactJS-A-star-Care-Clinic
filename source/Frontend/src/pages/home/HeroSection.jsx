@@ -29,7 +29,7 @@ export default function HeroSection() {
                         transition={{ delay: 0.3, duration: 0.8 }}
                     >
                         <span className="text-white font-bold">Nha khoa thẩm mỹ và</span>
-                        <span className="ml-2 inline-block rounded-lg bg-white px-3 py-1 text-[var(--brand-navy)]">
+                        <span className="inline-block rounded-lg bg-white px-3 py-1 text-[var(--brand-navy)]">
                             điều trị toàn diện
                         </span>
                     </motion.h1>
