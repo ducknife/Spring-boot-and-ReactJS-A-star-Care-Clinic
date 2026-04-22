@@ -698,8 +698,18 @@ public class AppointmentService {
             appointment.getEndTime(),
             appointmentId);
 
+        boolean patientConflict = hasPatientConflict(
+            appointment.getPatientId(),
+            appointment.getStartTime(),
+            appointment.getEndTime(),
+            appointmentId);
+
         if (doctorConflict) {
             throw new ConflictException("Bac si da co lich hen trung khung gio");
+        }
+
+        if (patientConflict) {
+            throw new ConflictException("Benh nhan da co lich hen trung khung gio");
         }
     }
 
@@ -856,6 +866,27 @@ public class AppointmentService {
                     LocalDateTime existingEnd = existingStart.plusMinutes(SLOT_DURATION_MINUTES);
                     return start.isBefore(existingEnd) && end.isAfter(existingStart);
                 });
+    }
+
+    private boolean hasPatientConflict(
+            Long patientId,
+            LocalDateTime start,
+            LocalDateTime end,
+            Long excludingAppointmentId) {
+        if (excludingAppointmentId == null) {
+            return appointmentRepository.existsPatientConflict(
+                    patientId,
+                    start,
+                    end,
+                    ACTIVE_SCHEDULE_STATUSES);
+        }
+
+        return appointmentRepository.existsPatientConflictExcludingId(
+                excludingAppointmentId,
+                patientId,
+                start,
+                end,
+                ACTIVE_SCHEDULE_STATUSES);
     }
 
     private void validateDoctorBySchedule(

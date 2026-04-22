@@ -56,6 +56,34 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
                                             @Param("activeStatuses") List<AppointmentStatus> activeStatuses);
 
     @Query("""
+            select count(a) > 0
+            from Appointment a
+            where a.patientId = :patientId
+                and a.status in :activeStatuses
+                and :startTime < a.endTime
+                and :endTime > a.startTime
+            """)
+    boolean existsPatientConflict(@Param("patientId") Long patientId,
+                                  @Param("startTime") LocalDateTime startTime,
+                                  @Param("endTime") LocalDateTime endTime,
+                                  @Param("activeStatuses") List<AppointmentStatus> activeStatuses);
+
+    @Query("""
+            select count(a) > 0
+            from Appointment a
+            where a.id <> :appointmentId
+                and a.patientId = :patientId
+                and a.status in :activeStatuses
+                and :startTime < a.endTime
+                and :endTime > a.startTime
+            """)
+    boolean existsPatientConflictExcludingId(@Param("appointmentId") Long appointmentId,
+                                             @Param("patientId") Long patientId,
+                                             @Param("startTime") LocalDateTime startTime,
+                                             @Param("endTime") LocalDateTime endTime,
+                                             @Param("activeStatuses") List<AppointmentStatus> activeStatuses);
+
+    @Query("""
             select u.fullName as name, count(a.id) as totalCount
             from Appointment a
             join a.doctor u
