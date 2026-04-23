@@ -15,7 +15,7 @@ const guestMenu = [
             { id: "p3", label: "Hỏi đáp", to: "/faq" },
         ],
     },
-    { id: 7, to: "https://acare-assistant.example.com", name: "Trợ lý A*Care", hasArrow: false, isExternal: true },
+    { id: 7, to: import.meta.env.VITE_AI_URL, name: "Trợ lý A*Care", hasArrow: false, isExternal: true },
 ];
 
 // Menu cho ADMIN
@@ -24,7 +24,7 @@ const adminMenu = [
     { id: 2, to: "/admin/users", name: "Người dùng", hasArrow: false },
     { id: 3, to: "/admin/services", name: "Dịch vụ", hasArrow: false },
     { id: 4, to: "/admin/statistics", name: "Thống kê", hasArrow: false },
-    { id: 5, to: "https://acare-assistant.example.com", name: "Trợ lý A*Care", hasArrow: false, isExternal: true },
+    { id: 5, to: import.meta.env.VITE_AI_URL, name: "Trợ lý A*Care", hasArrow: false, isExternal: true },
 ];
 
 // Menu cho DOCTOR
@@ -32,7 +32,7 @@ const doctorMenu = [
     { id: 1, to: "/doctor/schedule", name: "Lịch khám", hasArrow: false },
     { id: 2, to: "/doctor/reports", name: "Thống kê", hasArrow: false },
     { id: 3, to: "/instruction", name: "Hướng dẫn", hasArrow: false },
-    { id: 4, to: "https://acare-assistant.example.com", name: "Trợ lý A*Care", hasArrow: false, isExternal: true },
+    { id: 4, to: import.meta.env.VITE_AI_URL, name: "Trợ lý A*Care", hasArrow: false, isExternal: true },
 ];
 
 // Menu cho PATIENT
@@ -43,7 +43,7 @@ const patientMenu = [
     { id: 4, to: "/patient/book", name: "Đặt lịch", hasArrow: false },
     { id: 5, to: "/patient/appointments", name: "Lịch hẹn", hasArrow: false },
     { id: 6, to: "/patient/history", name: "Lịch sử", hasArrow: false },
-    { id: 7, to: "https://acare-assistant.example.com", name: "Trợ lý A*Care", hasArrow: false, isExternal: true },
+    { id: 7, to: import.meta.env.VITE_AI_URL, name: "Trợ lý A*Care", hasArrow: false, isExternal: true },
 ];
 
 // Export theo vai trò
