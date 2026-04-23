@@ -33,18 +33,18 @@ function About() {
 
     return (
         <div className="min-h-screen bg-[var(--surface)]">
-            <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-16">
+            <div className="mx-auto max-w-6xl px-6 py-16">
                 {/* Hero Section - No separate background */}
                 <motion.div
                     initial="hidden"
                     animate="show"
                     variants={fadeUp}
-                    className="mb-10 rounded-[28px] border border-cyan-100 bg-[var(--brand-navy)] p-6 text-center text-white shadow-2xl sm:mb-14 sm:rounded-[32px] sm:p-10"
+                    className="mb-14 rounded-[32px] border border-cyan-100 bg-[var(--brand-navy)] p-10 text-center text-white shadow-2xl"
                 >
                     <span className="font-bold text-sm uppercase tracking-[0.18em] text-cyan-200">
                         ABOUT US
                     </span>
-                    <h1 className="mt-4 mb-6 text-2xl font-bold sm:text-3xl md:text-5xl">
+                    <h1 className="slogan-h-1 mt-4 mb-6 text-3xl font-bold md:text-5xl">
                         Sức khỏe của bạn là ưu tiên hàng đầu
                     </h1>
                     <p className="mx-auto max-w-3xl text-lg leading-relaxed text-cyan-50/90">
@@ -61,7 +61,7 @@ function About() {
                     className="mb-14 flex justify-center"
                 >
                     <div className="relative">
-                        <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[#00278D] shadow-2xl sm:h-32 sm:w-32">
+                        <div className="w-32 h-32 rounded-full bg-[#00278D] flex items-center justify-center shadow-2xl">
                             <div className="text-center">
                                 <FiHeart className="text-white text-4xl mx-auto mb-2" />
                                 <p className="text-white text-xs font-bold uppercase tracking-wider">
@@ -84,7 +84,7 @@ function About() {
                     initial="hidden"
                     whileInView="show"
                     viewport={{ once: true }}
-                    className="mb-14 space-y-5 rounded-[24px] border border-cyan-100 bg-white p-5 shadow-xl sm:rounded-[28px] sm:p-8"
+                    className="mb-14 space-y-5 rounded-[28px] border border-cyan-100 bg-white p-8 shadow-xl"
                 >
                     <motion.div 
                         variants={fadeUp}
@@ -179,7 +179,7 @@ function About() {
                     viewport={{ once: true }}
                     className="mb-14"
                 >
-                    <h2 className="mb-8 text-center text-2xl font-bold text-[#00278D] sm:mb-10 sm:text-3xl">
+                    <h2 className="text-3xl font-bold text-[#00278D] text-center mb-10">
                         Giá trị cốt lõi
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -204,9 +204,9 @@ function About() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="rounded-[24px] border border-cyan-100 bg-white p-6 text-center shadow-xl sm:rounded-[28px] sm:p-10"
+                    className="rounded-[28px] border border-cyan-100 bg-white p-10 text-center shadow-xl"
                 >
-                    <h2 className="mb-4 text-2xl font-bold text-[#00278D] sm:text-3xl">
+                    <h2 className="text-3xl font-bold text-[#00278D] mb-4">
                         Đội ngũ chuyên môn
                     </h2>
                     <p className="text-slate-600 max-w-3xl mx-auto mb-8">

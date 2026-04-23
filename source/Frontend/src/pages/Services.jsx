@@ -176,7 +176,7 @@ function Services() {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="mx-auto mb-8 max-w-6xl rounded-[24px] bg-[var(--brand-navy)] p-5 text-center text-3xl font-semibold text-white shadow-2xl sm:rounded-[28px] sm:p-8 sm:text-4xl"
+                className="mx-auto mb-8 max-w-6xl rounded-[24px] bg-[var(--brand-navy)] p-5 text-center text-3xl font-semibold slogan-h-1 shadow-2xl sm:rounded-[28px] sm:p-8 sm:text-4xl"
             >
                 Danh mục dịch vụ
             </motion.h1>

@@ -51,6 +51,12 @@ h6 {
     color: var(--brand-navy);
 }
 
+.slogan-h-1 {
+    color: white;
+}
+
+
+
 a,
 button {
     transition: all 0.2s ease;

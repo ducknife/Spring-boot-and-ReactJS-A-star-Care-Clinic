@@ -30,7 +30,7 @@ function FAQ() {
                 >
                     <FiHelpCircle className="mx-auto text-5xl text-cyan-200 sm:text-7xl" />
                 </motion.div>
-                <h1 className="mt-4 mb-6 text-3xl font-bold sm:text-4xl md:text-5xl">
+                <h1 className="slogan-h-1 mt-4 mb-6 text-3xl font-bold sm:text-4xl md:text-5xl">
                     Câu hỏi thường gặp
                 </h1>
                 <p className="mx-auto max-w-2xl text-lg text-cyan-50/90">
@@ -115,7 +115,7 @@ function FAQ() {
                 transition={{ duration: 0.6 }}
                 className="mx-auto mt-12 max-w-3xl rounded-2xl bg-[var(--brand-navy)] p-6 text-center text-white shadow-2xl sm:mt-16 sm:p-10"
             >
-                <h3 className="mb-4 text-2xl font-bold sm:text-3xl">
+                <h3 className="slogan-h-1 mb-4 text-2xl font-bold sm:text-3xl">
                     Không tìm thấy câu trả lời?
                 </h3>
                 <p className="text-white/90 mb-6 text-lg">

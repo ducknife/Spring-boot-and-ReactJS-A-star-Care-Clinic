@@ -2,7 +2,6 @@ import { RiTwitterXLine, RiArrowRightLine, RiArrowUpSLine } from "react-icons/ri
 import { FaFacebookF, FaInstagram, FaPinterestP } from "react-icons/fa";
 import { services, information } from "../data/footerList";
 import logo_plus from "../assets/images/logo/clinic.png";
-import Chatbot from "./Chatbot";
 
 function GoTopButton() {
     return (
@@ -133,7 +132,6 @@ function Footer() {
                 </div>
             </div>
             <GoTopButton />
-            <Chatbot />
         </footer>
     );
 }

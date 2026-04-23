@@ -258,7 +258,7 @@ function Instruction() {
                 <span className="font-bold text-sm uppercase tracking-[0.18em] text-cyan-200">
                     INSTRUCTION
                 </span>
-                <h1 className="mt-4 mb-6 text-3xl font-bold sm:text-4xl md:text-5xl">
+                <h1 className="slogan-h-1 mt-4 mb-6 text-3xl font-bold sm:text-4xl md:text-5xl">
                     Nếu bạn là {getRoleTitle()}
                 </h1>
                 <p className="mx-auto max-w-3xl text-lg text-cyan-50/90">
