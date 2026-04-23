@@ -1,4 +1,4 @@
-import { apiClient, geminiClient } from "../axiosClient";
+import { apiClient } from "../axiosClient";
 
 export const toQueryString = (params = {}) => {
     const query = new URLSearchParams();
@@ -41,10 +41,5 @@ export const httpPatch = async (url, payload) => {
 
 export const httpDelete = async (url) => {
     const { data } = await apiClient.delete(url);
-    return data;
-};
-
-export const geminiAsk = async (prompt) => {
-    const { data } = await geminiClient.post("/ask", { question: prompt });
     return data;
 };

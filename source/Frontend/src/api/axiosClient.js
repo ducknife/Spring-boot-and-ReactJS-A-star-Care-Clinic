@@ -8,13 +8,6 @@ export const apiClient = axios.create({
     }
 });
 
-export const geminiClient = axios.create({
-    baseURL: "http://localhost:8005",
-    headers: {
-        "Content-Type": "application/json"
-    }
-});
-
 const extractErrorMessage = (error) => {
     const payload = error?.response?.data;
 

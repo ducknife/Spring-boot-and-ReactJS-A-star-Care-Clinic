@@ -3,7 +3,6 @@ export {
     adminDashboardService,
     appointmentService,
     authService,
-    geminiService,
     serviceService,
     specialtyService,
     userService,
