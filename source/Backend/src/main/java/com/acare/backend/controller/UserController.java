@@ -83,7 +83,7 @@ public class UserController {
 
     @GetMapping("/doctor")
     public ResponseEntity<Page<DoctorPublicResponse>> getDoctors(
-            @PageableDefault(size = 4, sort = "fullName") Pageable pageable) {
+            @PageableDefault(size = 8, sort = "fullName") Pageable pageable) {
         return ResponseEntity.ok(userService.getDoctors(pageable));
     }
 

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import DoctorCard from "../components/DoctorCard";
 import { userService } from "../api";
 
-const DOCTORS_PER_PAGE = 4;
+const DOCTORS_PER_PAGE = 8;
 
 const normalizeDoctors = (payload) => {
     if (Array.isArray(payload)) return payload;
