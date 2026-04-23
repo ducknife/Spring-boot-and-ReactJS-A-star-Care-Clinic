@@ -24,7 +24,7 @@ const adminMenu = [
     { id: 2, to: "/admin/users", name: "Người dùng", hasArrow: false },
     { id: 3, to: "/admin/services", name: "Dịch vụ", hasArrow: false },
     { id: 4, to: "/admin/statistics", name: "Thống kê", hasArrow: false },
-    { id: 5, to: "https://acare-assistant.example.com", name: "Trợ lý y tế", hasArrow: false, isExternal: true },
+    { id: 5, to: "https://acare-assistant.example.com", name: "Trợ lý A*Care", hasArrow: false, isExternal: true },
 ];
 
 // Menu cho DOCTOR
