@@ -58,7 +58,7 @@ const router = createBrowserRouter([
             { path: "/instruction", element: <Instruction /> },
             { path: "/faq", element: <FAQ /> },
             { path: "/contact", element: <Contact /> },
-            //   { path: "/contact", element: <Contact /> },
+            { path: "/contact", element: <Contact /> },
             {
                 element: <RequiredRole allowed={["PATIENT"]} />,
                 children: [

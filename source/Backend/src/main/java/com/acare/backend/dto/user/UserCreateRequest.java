@@ -31,6 +31,7 @@ public class UserCreateRequest {
     private String specialty;
     @JsonAlias({"clinicRoom", "room"})
     private String clinicLocation;
+    private Integer yearsExperience;
     private String department;
     private String gender;
     private String birthDate;

@@ -30,6 +30,7 @@ const USER_CREATE_MESSAGE_MAP = {
     "PASSWORD MISMATCH": "Mật khẩu xác nhận không khớp",
     "DOCTOR SPECIALTY IS REQUIRED": "Bác sĩ phải có chuyên môn/chuyên khoa",
     "DOCTOR CLINIC LOCATION IS REQUIRED": "Bác sĩ phải có phòng khám",
+    "DOCTOR YEARS EXPERIENCE IS REQUIRED": "Bác sĩ phải có số năm kinh nghiệm",
 };
 
 const mapCreateMessage = (message) => {
@@ -51,6 +52,7 @@ function AddUser() {
         role: "PATIENT",
         specialtyId: "",
         clinicLocation: "",
+        yearsExperience: 0,
         gender: "OTHER",
         birthDate: "",
         address: "",
@@ -98,6 +100,7 @@ function AddUser() {
         if (name === "role" && value !== "DOCTOR") {
             next.specialtyId = "";
             next.clinicLocation = "";
+            next.yearsExperience = 0;
         }
         setForm(next);
     };
@@ -151,10 +154,22 @@ function AddUser() {
             return;
         }
 
+        if (form.role === "DOCTOR" && Number(form.yearsExperience) < 0) {
+            setResultModal({
+                isOpen: true,
+                title: "Không thể tạo người dùng",
+                message: mapCreateMessage("DOCTOR YEARS EXPERIENCE IS REQUIRED"),
+                tone: "warning",
+                nextAction: "none",
+            });
+            return;
+        }
+
         const payload = {
             ...form,
             specialtyId: form.role === "DOCTOR" ? Number(form.specialtyId) : undefined,
             clinicLocation: form.role === "DOCTOR" ? form.clinicLocation.trim() : undefined,
+            yearsExperience: form.role === "DOCTOR" ? Number(form.yearsExperience || 0) : undefined,
             birthDate: ymdToDmy(form.birthDate),
             workingDays: form.workingDays.join(","),
         };
@@ -311,35 +326,48 @@ function AddUser() {
                         />
                     </div>
                     {form.role === "DOCTOR" && (
-                        <div>
-                            <label className="block text-slate-600 mb-1">Chuyên khoa</label>
-                            <CustomDropdown
-                                name="specialtyId"
-                                value={form.specialtyId}
-                                onChange={handleChange}
-                                options={specialties.map((specialty) => ({
-                                    value: String(specialty.id),
-                                    label: `${specialty.name} (${specialty.code})`,
-                                }))}
-                                placeholder="-- Chọn chuyên khoa --"
-                                required
-                            />
-                            {specialtiesError && <p className="mt-1 text-sm text-slate-700">{specialtiesError}</p>}
-                        </div>
-                    )}
-                    {form.role === "DOCTOR" && (
-                        <div>
-                            <label className="block text-slate-600 mb-1">Phòng khám của bác sĩ</label>
-                            <input
-                                type="text"
-                                name="clinicLocation"
-                                value={form.clinicLocation}
-                                onChange={handleChange}
-                                placeholder="Ví dụ: Tòa A - Phòng 301"
-                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#00278D] outline-none"
-                                required
-                            />
-                        </div>
+                        <>
+                            <div>
+                                <label className="block text-slate-600 mb-1">Chuyên khoa</label>
+                                <CustomDropdown
+                                    name="specialtyId"
+                                    value={form.specialtyId}
+                                    onChange={handleChange}
+                                    options={specialties.map((specialty) => ({
+                                        value: String(specialty.id),
+                                        label: `${specialty.name} (${specialty.code})`,
+                                    }))}
+                                    placeholder="-- Chọn chuyên khoa --"
+                                    required
+                                />
+                                {specialtiesError && <p className="mt-1 text-sm text-slate-700">{specialtiesError}</p>}
+                            </div>
+                            <div>
+                                <label className="block text-slate-600 mb-1">Số năm kinh nghiệm</label>
+                                <input
+                                    type="number"
+                                    name="yearsExperience"
+                                    min="0"
+                                    step="1"
+                                    value={form.yearsExperience}
+                                    onChange={handleChange}
+                                    placeholder="Nhập số năm kinh nghiệm..."
+                                    className="w-full px-4 py-2 transition duration-200 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#00278D] outline-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-slate-600 mb-1">Phòng khám của bác sĩ</label>
+                                <input
+                                    type="text"
+                                    name="clinicLocation"
+                                    value={form.clinicLocation}
+                                    onChange={handleChange}
+                                    placeholder="Ví dụ: Tòa A - Phòng 301"
+                                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#00278D] outline-none"
+                                    required
+                                />
+                            </div>
+                        </>
                     )}
                     {form.role === "DOCTOR" && (
                         <div className="col-span-2 grid grid-cols-2 gap-x-5">
@@ -358,6 +386,7 @@ function AddUser() {
                                     ))}
                                 </div>
                             </div>
+                            
                             <div>
                                 <label className="block text-slate-600 mb-1 mt-3">Giờ bắt đầu</label>
                                 <input type="time" name="shiftStart" value={form.shiftStart} onChange={handleChange} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#00278D] outline-none" required />

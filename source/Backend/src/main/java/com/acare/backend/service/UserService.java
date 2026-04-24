@@ -416,6 +416,8 @@ public class UserService {
                     ? doctorClinicLocation.trim()
                     : "CS1 - Tầng 1";
 
+                Integer yearsExperience = normalizeYearsExperience(request != null ? request.getYearsExperience() : null, 0);
+
             DoctorProfile profile = DoctorProfile.createForUser(user.getId(), resolved.specialtyId()).toBuilder()
                     .department(resolved.department())
                     .specialty(resolved.specialty())
@@ -423,6 +425,7 @@ public class UserService {
                     .shiftEnd(end)
                     .workingDays(days)
                     .clinicLocation(clinicLocation)
+                    .yearsExperience(yearsExperience)
                     .build();
             doctorProfileRepository.save(profile);
             return;
