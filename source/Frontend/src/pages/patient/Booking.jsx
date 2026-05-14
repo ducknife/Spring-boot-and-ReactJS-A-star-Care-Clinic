@@ -422,7 +422,12 @@ export default function Booking() {
                                                         <>
                                                             <div className="flex flex-wrap gap-3">
                                                                 {doctorSlotsArr.map((slot) => {
-                                                                    const disabled = !slot.available;
+                                                                    const slotTimeLabel = slot.time.slice(0, 5);
+                                                                    const slotDateTime = currentDoctorDate
+                                                                        ? new Date(`${currentDoctorDate}T${slotTimeLabel}`)
+                                                                        : null;
+                                                                    const isPastSlot = slotDateTime ? slotDateTime.getTime() < Date.now() : false;
+                                                                    const disabled = !slot.available || isPastSlot;
                                                                     const isThisSlotSelected = isSelectedDoctor && selectedTime === slot.time;
                                                                     
                                                                     let btnClass = "w-28 py-2 text-sm font-bold rounded-lg border transition-all shadow-sm text-center ";
@@ -442,7 +447,7 @@ export default function Booking() {
                                                                             onClick={() => handleSelectSlot(doc.id, slot.time)}
                                                                             className={btnClass}
                                                                         >
-                                                                            {slot.time.slice(0, 5)}
+                                                                            {slotTimeLabel}
                                                                         </button>
                                                                     );
                                                                 })}
