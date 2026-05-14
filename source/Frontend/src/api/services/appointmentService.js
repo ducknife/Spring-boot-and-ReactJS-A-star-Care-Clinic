@@ -74,8 +74,14 @@ export const appointmentService = {
     async pendingByDoctorId(id) {
         return httpGet(`/appointments${toQueryString({ doctorId: id, pending: true })}`);
     },
+    async pendingByDoctorIdPaged(id, params = {}) {
+        return httpGet(`/appointments/pending/doctor/${id}/page${toQueryString(params)}`);
+    },
     async pendingByPatientId(id) {
         return httpGet(`/appointments${toQueryString({ patientId: id, pending: true })}`);
+    },
+    async pendingByPatientIdPaged(id, params = {}) {
+        return httpGet(`/appointments/pending/patient/${id}/page${toQueryString(params)}`);
     },
     async doneThisMonth() {
         return httpGet(`/appointments${toQueryString({ doneThisMonth: true })}`);

@@ -69,7 +69,7 @@ function HistoryPage() {
             try {
                 const pageResponse = await appointmentService.historyByPatientId(id, {
                     page: currentPage,
-                    size: 4,
+                    size: 5,
                     sort: "startTime,desc",
                 });
 

@@ -4,7 +4,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -45,7 +44,6 @@ public class AppointmentService {
     private static final int SLOT_DURATION_MINUTES = 25;
     private static final LocalTime BUSINESS_START = LocalTime.of(8, 0);
     private static final LocalTime BUSINESS_END = LocalTime.of(17, 0);
-    private static final ZoneId CLINIC_ZONE = ZoneId.of("Asia/Ho_Chi_Minh");
 
     private static final List<AppointmentStatus> ACTIVE_SCHEDULE_STATUSES = List.of(
             AppointmentStatus.PENDING,
@@ -253,6 +251,10 @@ public class AppointmentService {
         return appointments;
     }
 
+    public Page<Appointment> getPendingByPatientId(Long patientId, Pageable pageable) {
+        return appointmentRepository.findByPatientIdAndStatus(patientId, AppointmentStatus.PENDING, pageable);
+    }
+
     public List<Appointment> getNotPendingByPatientId(Long patientId) {
         List<Appointment> done = appointmentRepository.findByStatusAndPatientId(AppointmentStatus.DONE, patientId);
         List<Appointment> cancelled = appointmentRepository.findByStatusAndPatientId(AppointmentStatus.CANCELLED, patientId);
@@ -269,6 +271,10 @@ public class AppointmentService {
         List<Appointment> appointments = appointmentRepository.findByStatusAndDoctorId(AppointmentStatus.PENDING, doctorId);
         appointments.sort(Comparator.comparing(Appointment::getStartTime));
         return appointments;
+    }
+
+    public Page<Appointment> getPendingByDoctorId(Long doctorId, Pageable pageable) {
+        return appointmentRepository.findByDoctorIdAndStatus(doctorId, AppointmentStatus.PENDING, pageable);
     }
 
     public List<Appointment> getByDoctorId(Long doctorId) {
@@ -528,7 +534,7 @@ public class AppointmentService {
         List<AppointmentAvailabilityOption> options = new ArrayList<>();
         LocalTime cursor = ceilToHalfHour(effectiveStart);
         LocalTime lastStart = floorToHalfHour(effectiveEnd.minusMinutes(durationMinutes));
-        LocalDateTime now = LocalDateTime.now(CLINIC_ZONE);
+        LocalDateTime now = LocalDateTime.now();
 
         if (cursor.isAfter(lastStart)) {
             return List.of();
@@ -600,7 +606,7 @@ public class AppointmentService {
         List<AppointmentAvailabilityOption> options = new ArrayList<>();
         LocalTime cursor = BUSINESS_START;
         LocalTime lastStart = BUSINESS_END.minusMinutes(durationMinutes);
-        LocalDateTime now = LocalDateTime.now(CLINIC_ZONE);
+        LocalDateTime now = LocalDateTime.now();
 
         while (!cursor.isAfter(lastStart)) {
             LocalDateTime start = date.atTime(cursor);
@@ -743,7 +749,7 @@ public class AppointmentService {
             throw new BadRequestException("Thoi gian dat lich khong hop le");
         }
 
-        if (start.isBefore(LocalDateTime.now(CLINIC_ZONE))) {
+        if (start.isBefore(LocalDateTime.now())) {
             throw new BadRequestException("Khong the dat hoac sua lich vao moc thoi gian da qua");
         }
     }

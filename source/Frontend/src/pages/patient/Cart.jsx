@@ -36,6 +36,8 @@ function Cart() {
     const id = getUserId();
     const [loading, setLoading] = useState(true);
     const [refreshKey, setRefreshKey] = useState(0);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
     const [appointments, setAppointments] = useState([]);
     const [patientInfo, setPatientInfo] = useState(null);
     const [doctorMap, setDoctorMap] = useState({});
@@ -50,6 +52,7 @@ function Cart() {
 
     useEffect(() => {
         const handleAppointmentChanged = () => {
+            setCurrentPage(0);
             setRefreshKey((prev) => prev + 1);
         };
 
@@ -60,12 +63,19 @@ function Cart() {
     useEffect(() => {
         if (!id) {
             setLoading(false);
+            setTotalPages(0);
             return;
         }
 
         const loadAppointments = async () => {
             try {
-                const pendingAppointments = await appointmentService.pendingByPatientId(id);
+                const pageResponse = await appointmentService.pendingByPatientIdPaged(id, {
+                    page: currentPage,
+                    size: 5,
+                    sort: "startTime,asc",
+                });
+                const pendingAppointments = pageResponse?.content || [];
+                setTotalPages(pageResponse?.totalPages || 0);
 
                 try {
                     const [profile, activityNotices] = await Promise.all([
@@ -135,6 +145,8 @@ function Cart() {
             }
             catch (err) {
                 console.log(err.message);
+                setAppointments([]);
+                setTotalPages(0);
             }
             finally {
                 setLoading(false);
@@ -142,7 +154,7 @@ function Cart() {
         };
         loadAppointments();
 
-    }, [id, refreshKey]);
+    }, [id, refreshKey, currentPage]);
 
     if (loading) return <p className="text-center text-gray-500 py-10">Đang tải...</p>;
 
@@ -168,8 +180,9 @@ function Cart() {
                 ) : null}
 
                 {appointments.length > 0 ? (
-                    <div className="space-y-4">
-                        {appointments.map((appointment) => {
+                    <>
+                        <div className="space-y-4">
+                            {appointments.map((appointment) => {
                             const doctor = doctorMap[appointment.doctorId] || {};
                             const serviceId = Number(appointment.serviceId ?? appointment.note);
                             const service = serviceMap[serviceId] || {};
@@ -230,8 +243,43 @@ function Cart() {
                                     </div>
                                 </div>
                             );
-                        })}
-                    </div>
+                            })}
+                        </div>
+
+                        {totalPages > 1 ? (
+                            <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
+                                <button
+                                    type="button"
+                                    disabled={currentPage === 0}
+                                    onClick={() => setCurrentPage((prev) => Math.max(0, prev - 1))}
+                                    className="rounded-md border border-slate-300 px-3 py-1.5 text-sm disabled:opacity-50"
+                                >
+                                    Trước
+                                </button>
+                                {Array.from({ length: totalPages }).map((_, index) => (
+                                    <button
+                                        key={index}
+                                        type="button"
+                                        onClick={() => setCurrentPage(index)}
+                                        className={`rounded-md px-3 py-1.5 text-sm border ${currentPage === index
+                                            ? "bg-[#00278D] text-white border-[#00278D]"
+                                            : "border-slate-300 text-slate-700 hover:bg-slate-100"
+                                            }`}
+                                    >
+                                        {index + 1}
+                                    </button>
+                                ))}
+                                <button
+                                    type="button"
+                                    disabled={currentPage >= totalPages - 1}
+                                    onClick={() => setCurrentPage((prev) => Math.min(totalPages - 1, prev + 1))}
+                                    className="rounded-md border border-slate-300 px-3 py-1.5 text-sm disabled:opacity-50"
+                                >
+                                    Sau
+                                </button>
+                            </div>
+                        ) : null}
+                    </>
                 ) : (
                     <p className="text-xl text-[#00278D]">{"Bạn chưa có lịch hẹn nào."}</p>
                 )}

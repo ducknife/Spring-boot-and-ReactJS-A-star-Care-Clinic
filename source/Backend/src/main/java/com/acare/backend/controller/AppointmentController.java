@@ -134,7 +134,7 @@ public class AppointmentController {
     public ResponseEntity<Page<AppointmentResponse>> getHistoryByPatientId(
             @PathVariable Long patientId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "4") int size,
+            @RequestParam(defaultValue = "5") int size,
             @RequestParam(defaultValue = "startTime,desc") String[] sort) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("startTime")));
         if (sort != null && sort.length > 0 && sort[0] != null && !sort[0].isBlank()) {
@@ -151,9 +151,51 @@ public class AppointmentController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/pending/patient/{patientId}/page")
+    public ResponseEntity<Page<AppointmentResponse>> getPendingAppointmentsByPatientIdPage(
+            @PathVariable Long patientId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "startTime,asc") String[] sort) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.asc("startTime")));
+        if (sort != null && sort.length > 0 && sort[0] != null && !sort[0].isBlank()) {
+            String[] sortParts = sort[0].split(",");
+            String property = sortParts[0];
+            Sort.Direction direction = (sortParts.length > 1 && "desc".equalsIgnoreCase(sortParts[1]))
+                    ? Sort.Direction.DESC
+                    : Sort.Direction.ASC;
+            pageable = PageRequest.of(page, size, Sort.by(new Sort.Order(direction, property)));
+        }
+
+        Page<AppointmentResponse> response = appointmentService.getPendingByPatientId(patientId, pageable)
+                .map(AppointmentResponse::from);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/pending/doctor/{doctorId}")
     public ResponseEntity<List<AppointmentResponse>> getPendingAppoinmentsByDoctorId(@PathVariable Long doctorId) {
         return ResponseEntity.ok(appointmentService.getPendingByDoctorId(doctorId).stream().map(AppointmentResponse::from).toList());
+    }
+
+    @GetMapping("/pending/doctor/{doctorId}/page")
+    public ResponseEntity<Page<AppointmentResponse>> getPendingAppointmentsByDoctorIdPage(
+            @PathVariable Long doctorId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "startTime,asc") String[] sort) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.asc("startTime")));
+        if (sort != null && sort.length > 0 && sort[0] != null && !sort[0].isBlank()) {
+            String[] sortParts = sort[0].split(",");
+            String property = sortParts[0];
+            Sort.Direction direction = (sortParts.length > 1 && "desc".equalsIgnoreCase(sortParts[1]))
+                    ? Sort.Direction.DESC
+                    : Sort.Direction.ASC;
+            pageable = PageRequest.of(page, size, Sort.by(new Sort.Order(direction, property)));
+        }
+
+        Page<AppointmentResponse> response = appointmentService.getPendingByDoctorId(doctorId, pageable)
+                .map(AppointmentResponse::from);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/doctor/{doctorId}")
