@@ -69,13 +69,29 @@ function Cart() {
 
         const loadAppointments = async () => {
             try {
-                const pageResponse = await appointmentService.pendingByPatientIdPaged(id, {
-                    page: currentPage,
-                    size: 5,
-                    sort: "startTime,asc",
-                });
-                const pendingAppointments = pageResponse?.content || [];
-                setTotalPages(pageResponse?.totalPages || 0);
+                let pageResponse = null;
+                try {
+                    pageResponse = await appointmentService.pendingByPatientIdPaged(id, {
+                        page: currentPage,
+                        size: 5,
+                        sort: "startTime,asc",
+                    });
+                } catch {
+                    pageResponse = await appointmentService.pendingByPatientId(id);
+                }
+
+                let pendingAppointments = [];
+                let resolvedTotalPages = 0;
+                if (Array.isArray(pageResponse?.content)) {
+                    pendingAppointments = pageResponse.content;
+                    resolvedTotalPages = pageResponse?.totalPages || 0;
+                } else if (Array.isArray(pageResponse)) {
+                    const total = pageResponse.length;
+                    resolvedTotalPages = Math.max(1, Math.ceil(total / 5));
+                    const startIndex = currentPage * 5;
+                    pendingAppointments = pageResponse.slice(startIndex, startIndex + 5);
+                }
+                setTotalPages(resolvedTotalPages);
 
                 try {
                     const [profile, activityNotices] = await Promise.all([
